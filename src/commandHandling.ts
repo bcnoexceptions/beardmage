@@ -1,6 +1,7 @@
 import * as Discord from "discord.js";
 import { sendMessageAs, notifyAuthorOfFailure } from "./util";
 import * as knownCommands from "./knownCommands";
+import { getUserName } from "./knownUsers";
 
 /** Assumes this message starts with ! */
 export async function handleCommand(client: Discord.Client, message: Discord.Message) {
@@ -49,7 +50,7 @@ export async function handleRegex(message: Discord.Message) {
 	const newText = subTarget.content.replace(regex, pieces[1]);
 
 	subTarget.delete();
-	sendMessageAs(message.author.username, message.author.avatarURL, newText);
+	sendMessageAs(getUserName(message.member), message.author.avatarURL, newText);
 }
 
 async function getMessageToRegex(regexMessage: Discord.Message): Promise<Discord.Message | null> {

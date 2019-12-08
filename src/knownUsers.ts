@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
 import { IStringMap } from "./util";
 
-const knownUsers: IStringMap<Discord.User> = {};
+const knownUsers: IStringMap<Discord.GuildMember> = {};
 
 export async function loadUsers(server: Discord.Guild) {
 	const fullGuild = await server.fetchMembers();
@@ -13,10 +13,10 @@ export async function loadUsers(server: Discord.Guild) {
 
 export function addUser(user: Discord.GuildMember) {
 	const name = getUserName(user);
-	knownUsers[name.toUpperCase()] = user.user;
+	knownUsers[name.toUpperCase()] = user;
 }
 
-function getUserName(user: Discord.GuildMember) {
+export function getUserName(user: Discord.GuildMember) {
 	let name = user.nickname;
 	if (!name) {
 		name = user.user.username;
@@ -29,7 +29,7 @@ export function renameUser(oldUser: Discord.GuildMember, newUser: Discord.GuildM
 	addUser(newUser);
 }
 
-export function lookupUser(name: string): Discord.User | null {
+export function lookupUser(name: string): Discord.GuildMember | null {
 	if (knownUsers[name.toUpperCase()]) {
 		return knownUsers[name.toUpperCase()];
 	}
@@ -48,6 +48,6 @@ export function lookupUser(name: string): Discord.User | null {
 
 export function logUsers() {
 	for (const name of Object.keys(knownUsers)) {
-		console.log(knownUsers[name].username);
+		console.log(getUserName(knownUsers[name]));
 	}
 }
