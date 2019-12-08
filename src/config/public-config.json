@@ -1,3 +1,4 @@
 {
-    "dbFile": "./data/lists.sqlite"
+	"listFile": "./data/lists.sqlite",
+	"channelFile": "./data/channels.sqlite"
 }
