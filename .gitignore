@@ -1,3 +1,5 @@
 node_modules
 data/lists.sqlite
 src/config/private-config.json
+data/channels.sqlite
+data/load-private.sql

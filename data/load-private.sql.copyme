@@ -1,0 +1,26 @@
+#!/bin/bash
+
+sqlite3 channels.sqlite 'DROP TABLE channels;'
+
+sqlite3 channels.sqlite 'CREATE TABLE channels ( channel TEXT, role TEXT, webhookID TEXT, webhookToken TEXT );'
+
+sqlite3 channels.sqlite "insert into channels values('xcoolevents', 'Camping Boy', '', '');"
+sqlite3 channels.sqlite "insert into channels values('shindig', 'Shindig', '', '');"
+sqlite3 channels.sqlite "insert into channels values('plattecon', 'Plattecon', '', '');"
+sqlite3 channels.sqlite "insert into channels values('tradtion', 'Monday Night Tradtion', '', '');"
+sqlite3 channels.sqlite "insert into channels values('monhun', 'Monster Hunter', '', '');"
+sqlite3 channels.sqlite "insert into channels values('fe3h-chat', 'Fire Emblem Spoilers', '', '');"
+sqlite3 channels.sqlite "insert into channels values('sports', 'sports', '', '');"
+sqlite3 channels.sqlite "insert into channels values('pick-of-the-day-archive', 'PickOfTheDay', '', '');"
+sqlite3 channels.sqlite "insert into channels values('get-fit', 'fitness', '', '');"
+sqlite3 channels.sqlite "insert into channels values('pokemon-chat', 'Pokemon', '', '');"
+sqlite3 channels.sqlite "insert into channels values('metal', 'metal', '', '');"
+sqlite3 channels.sqlite "insert into channels values('gibby-luv', 'gibby luv', '', '');"
+sqlite3 channels.sqlite "insert into channels values('work-shit', 'worker-boi', '', '');"
+sqlite3 channels.sqlite "insert into channels values('aladdin', 'h&b', '', '');"
+sqlite3 channels.sqlite "insert into channels values('wisconsin', 'Wisconsin', '', '');"
+sqlite3 channels.sqlite "insert into channels values('travel', 'travel', '', '');"
+sqlite3 channels.sqlite "insert into channels values('movie-club', 'movie club', '', '');"
+sqlite3 channels.sqlite "insert into channels values('age-of-empires', 'AOE', '', '');"
+sqlite3 channels.sqlite "insert into channels values('bloodstained-spoilers', 'Bloodstained', '', '');"
+sqlite3 channels.sqlite "insert into channels values('sekiro-spoilers', 'Sekiro', '', '');"

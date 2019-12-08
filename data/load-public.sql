@@ -1,11 +1,26 @@
 #!/bin/bash
 
+sqlite3 lists.sqlite 'DROP TABLE compliment1;'
+sqlite3 lists.sqlite 'DROP TABLE compliment2;'
+sqlite3 lists.sqlite 'DROP TABLE compliment3;'
+sqlite3 lists.sqlite 'DROP TABLE insult1;'
+sqlite3 lists.sqlite 'DROP TABLE insult2;'
+sqlite3 lists.sqlite 'DROP TABLE insult3;'
+
+sqlite3 lists.sqlite 'CREATE TABLE compliment1 ( value TEXT );'
+sqlite3 lists.sqlite 'CREATE TABLE compliment2 ( value TEXT );'
+sqlite3 lists.sqlite 'CREATE TABLE compliment3 ( value TEXT );'
+sqlite3 lists.sqlite 'CREATE TABLE insult1 ( value TEXT );'
+sqlite3 lists.sqlite 'CREATE TABLE insult2 ( value TEXT );'
+sqlite3 lists.sqlite 'CREATE TABLE insult3 ( value TEXT );'
+
 sqlite3 lists.sqlite 'delete from insult1;'
 sqlite3 lists.sqlite 'delete from insult2;'
 sqlite3 lists.sqlite 'delete from insult3;'
 sqlite3 lists.sqlite 'delete from compliment1;'
 sqlite3 lists.sqlite 'delete from compliment2;'
 sqlite3 lists.sqlite 'delete from compliment3;'
+
 sqlite3 lists.sqlite "insert into insult1 values('lazy');"
 sqlite3 lists.sqlite "insert into insult1 values('stupid');"
 sqlite3 lists.sqlite "insert into insult1 values('insecure');"
