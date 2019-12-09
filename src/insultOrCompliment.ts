@@ -14,7 +14,12 @@ export function handleInsultOrCompliment(
     const part1StartsVowel = "aeiou".indexOf(part1[0]) >= 0;
     const article = part1StartsVowel ? "an" : "a";
 
-    const result = `${whom}, you're ${article} ${part1} ${part2} ${part3}!`;
+    let result: string;
+    if (whom) {
+        result = `${whom}, you're ${article} ${part1} ${part2} ${part3}!`;
+    } else {
+        result = `You're ${article} ${part1} ${part2} ${part3}!`;
+    }
 
     message.channel.send(`${message.author.username} says: ${result}`);
 }
