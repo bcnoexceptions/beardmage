@@ -1,6 +1,7 @@
 {
-    "listFile": "./data/lists.sqlite",
-    "channelFile": "./data/channels.sqlite",
-    "generalChannel": "general",
-    "syncChannel": "nobs-chat"
+	"listFile": "./data/lists.sqlite",
+	"channelFile": "./data/channels.sqlite",
+	"generalChannel": "general",
+	"syncChannel": "nobs-chat",
+	"permittedChannels": ["general"]
 }

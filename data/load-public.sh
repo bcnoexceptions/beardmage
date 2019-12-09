@@ -1,11 +1,11 @@
 #!/bin/bash
 
-sqlite3 lists.sqlite 'DROP TABLE compliment1;'
-sqlite3 lists.sqlite 'DROP TABLE compliment2;'
-sqlite3 lists.sqlite 'DROP TABLE compliment3;'
-sqlite3 lists.sqlite 'DROP TABLE insult1;'
-sqlite3 lists.sqlite 'DROP TABLE insult2;'
-sqlite3 lists.sqlite 'DROP TABLE insult3;'
+sqlite3 lists.sqlite 'DROP TABLE IF EXISTS compliment1;'
+sqlite3 lists.sqlite 'DROP TABLE IF EXISTS compliment2;'
+sqlite3 lists.sqlite 'DROP TABLE IF EXISTS compliment3;'
+sqlite3 lists.sqlite 'DROP TABLE IF EXISTS insult1;'
+sqlite3 lists.sqlite 'DROP TABLE IF EXISTS insult2;'
+sqlite3 lists.sqlite 'DROP TABLE IF EXISTS insult3;'
 
 sqlite3 lists.sqlite 'CREATE TABLE compliment1 ( value TEXT );'
 sqlite3 lists.sqlite 'CREATE TABLE compliment2 ( value TEXT );'

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sqlite3 channels.sqlite 'DROP TABLE channels;'
+sqlite3 channels.sqlite 'DROP TABLE IF EXISTS channels;'
 
 sqlite3 channels.sqlite 'CREATE TABLE channels ( channel TEXT, role TEXT, webhookID TEXT, webhookToken TEXT );'
 
