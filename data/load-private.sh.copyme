@@ -4,6 +4,9 @@ sqlite3 channels.sqlite 'DROP TABLE channels;'
 
 sqlite3 channels.sqlite 'CREATE TABLE channels ( channel TEXT, role TEXT, webhookID TEXT, webhookToken TEXT );'
 
+sqlite3 channels.sqlite "insert into channels values('general', '', '', '');"
+sqlite3 channels.sqlite "insert into channels values('nobs-chat', '', '', '');"
+
 sqlite3 channels.sqlite "insert into channels values('xcoolevents', 'Camping Boy', '', '');"
 sqlite3 channels.sqlite "insert into channels values('shindig', 'Shindig', '', '');"
 sqlite3 channels.sqlite "insert into channels values('plattecon', 'Plattecon', '', '');"

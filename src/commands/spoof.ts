@@ -1,6 +1,7 @@
 import * as Discord from "discord.js";
-import { sendMessageAs, notifyAuthorOfFailure } from "../util";
+import { notifyAuthorOfFailure } from "../util";
 import { lookupUser, getUserName } from "../knownUsers";
+import { tryToPostInSameChannel } from "../channels";
 
 export default function process(message: Discord.Message): void {
     const pieces = message.content.split(/\s+/);
@@ -17,15 +18,22 @@ export default function process(message: Discord.Message): void {
 
     const knownUserRecord = lookupUser(userToSpoof);
 
+    let userName: string, avatar: string;
     if (knownUserRecord) {
-        sendMessageAs(
-            getUserName(knownUserRecord),
-            knownUserRecord.user.avatarURL,
-            spoofText
-        );
+        userName = getUserName(knownUserRecord);
+        avatar = knownUserRecord.user.avatarURL;
     } else {
-        sendMessageAs(userToSpoof, "", spoofText);
+        userName = userToSpoof;
+        avatar = "";
     }
+
+    tryToPostInSameChannel(
+        message,
+        spoofText,
+        userName,
+        "Can't spoof on this channel",
+        avatar
+    );
 }
 
 process.help = "!spoof <person> <jawnz>";

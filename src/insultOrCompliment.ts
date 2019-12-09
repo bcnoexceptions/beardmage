@@ -1,6 +1,5 @@
 import * as Discord from "discord.js";
 import { getRandomDatabaseOption } from "./database";
-import { sendMessageAs } from "./util";
 
 export function handleInsultOrCompliment(
     which: string,

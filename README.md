@@ -8,10 +8,11 @@
 
 ## SQL
 
--   From the data folder, run `bash load-public.sql'
--   Copy load-private.sql.copyme to load-private.sql
+-   From the data folder, run `bash load-public.sh`
+-   Copy load-private.sh.copyme to load-private.sh
 -   Fill in the webhooks
+-   Run `bash load-private.sh`
 
-# To: other folks working on this:
+# Optional
 
--   Webhooks seem to be the only way to spoof / regex, but the webhook is channel-specific. Right now there's just one for #general, but we may want others. To support spoofing in more channels than just #general, we'd need a webhook in each and a mapping of channels to tokens
+-   Mess with the "permittedChannels" array in messageHandler.ts to turn beardslave on/off for channels
