@@ -2,9 +2,10 @@ import { getWebhookForChannel } from "./database";
 import * as Discord from "discord.js";
 import { sendMessageToChannel } from "./webhooks";
 import { notifyAuthorOfFailure } from "./util";
+import { findOrCreateRole } from "./roles";
 
 export function canPostToChannel(channelName: string): boolean {
-    return !!getWebhookForChannel(channelName);
+	return !!getWebhookForChannel(channelName);
 }
 
 /**
@@ -19,23 +20,82 @@ export function canPostToChannel(channelName: string): boolean {
  * @returns {boolean} true on success
  */
 export function tryToPostInSameChannel(
-    message: Discord.Message,
-    text: string,
-    userName: string,
-    messageOnFailure: string | null,
-    avatarURL?: string
+	message: Discord.Message,
+	text: string,
+	userName: string,
+	messageOnFailure: string | null,
+	avatarURL?: string
 ): boolean {
-    const channel = (message.channel as Discord.TextChannel).name;
-    if (!canPostToChannel(channel)) {
-        if (messageOnFailure) {
-            notifyAuthorOfFailure(message, messageOnFailure);
-        }
-        return false;
-    }
+	const channel = (message.channel as Discord.TextChannel).name;
+	if (!canPostToChannel(channel)) {
+		if (messageOnFailure) {
+			notifyAuthorOfFailure(message, messageOnFailure);
+		}
+		return false;
+	}
 
-    if (!avatarURL) {
-        avatarURL = message.author.avatarURL;
-    }
-    sendMessageToChannel(channel, text, userName, avatarURL);
-    return true;
+	if (!avatarURL) {
+		avatarURL = message.author.avatarURL;
+	}
+	sendMessageToChannel(channel, text, userName, avatarURL);
+	return true;
+}
+
+export async function findOrCreateChannel(
+	server: Discord.Guild,
+	channelName: string,
+	roleName: string
+): Promise<Discord.TextChannel> {
+	const channel = findChannel(server, channelName);
+	if (channel) {
+		return channel; // assume the role is right
+	}
+
+	return createChannel(server, channelName, roleName);
+}
+
+export function findChannel(server: Discord.Guild, channelName: string): Discord.TextChannel | null {
+	for (const channel of server.channels.array()) {
+		if (channel.type !== "text") {
+			continue;
+		}
+
+		if ((channel as Discord.TextChannel).name === channelName) {
+			return channel as Discord.TextChannel;
+		}
+	}
+
+	return null;
+}
+
+export async function createChannel(
+	server: Discord.Guild,
+	channelName: string,
+	roleName: string
+): Promise<Discord.TextChannel> {
+	const channel = (await server.createChannel(channelName, { type: "text" })) as Discord.TextChannel;
+
+	console.log("created channel " + channelName);
+
+	const role = await findOrCreateRole(server, roleName);
+
+	await channel.overwritePermissions(role, {
+		SEND_MESSAGES: true,
+		EMBED_LINKS: true,
+		ADD_REACTIONS: true,
+		ATTACH_FILES: true,
+		READ_MESSAGE_HISTORY: true,
+		READ_MESSAGES: true,
+	});
+
+	console.log("added role " + roleName + " to #" + channelName);
+
+	return channel;
+}
+
+export interface IChannelData {
+	name: string;
+	role: string;
+	webhookID: string;
+	webhookToken: string;
 }

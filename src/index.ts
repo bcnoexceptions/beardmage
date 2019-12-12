@@ -3,13 +3,16 @@ import * as privateConfig from "./config/private-config.json";
 import * as knownUsers from "./knownUsers";
 import * as knownCommands from "./knownCommands";
 import { messageHandler } from "./messageHandler";
+import { syncServer } from "./serverSetup";
 
 const client = new Discord.Client();
 
 client.on("ready", async () => {
-    await knownUsers.loadUsers(client.guilds.array()[0]);
+    const xcool = client.guilds.array()[0];
 
+    await knownUsers.loadUsers(xcool);
     knownCommands.loadCommands();
+    syncServer(xcool);
 });
 
 client.on(

@@ -1,6 +1,7 @@
 import sqlite from "better-sqlite3";
 import * as publicConfig from "./config/public-config.json";
 import { IWebhook } from "./webhooks";
+import { IChannelData } from "./channels.js";
 
 /** Always pass `table` in hard-coded from TS, to avoid injection! */
 export function addDatabaseOption(table: string, value: string): void {
@@ -51,4 +52,36 @@ export function getWebhookForChannel(channelName: string): IWebhook | null {
     }
 
     return { ID, token };
+}
+
+export function loadAllChannels(): IChannelData[] {
+    const db = new sqlite(publicConfig.channelFile);
+    const statement = db.prepare(
+        `SELECT channel AS name, role, webhookID, webhookToken FROM channels`
+    );
+    const rows = statement.all();
+
+    const result: IChannelData[] = [];
+    for (const row of rows) {
+        result.push({
+            name: row.name,
+            role: row.role,
+            webhookID: row.webhookID,
+            webhookToken: row.webhookToken,
+        });
+    }
+
+    return result;
+}
+
+export function updateChannelRowWithWebhook(
+    channelName: string,
+    webhookID: string,
+    webhookToken: string
+): void {
+    const db = new sqlite(publicConfig.channelFile);
+    const statement = db.prepare(
+        `UPDATE channels SET webhookID = (?), webhookToken = (?) WHERE channel = (?)`
+    );
+    statement.run(webhookID, webhookToken, channelName);
 }
