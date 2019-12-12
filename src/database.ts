@@ -33,9 +33,18 @@ export function removeDatabaseOption(table: string, value: string): void {
 }
 
 export function getWebhookForChannel(channelName: string): IWebhook | null {
+    const channelInfo = getChannelInfo(channelName);
+    if (!channelInfo) {
+        return null;
+    }
+
+    return { ID: channelInfo.webhookID, token: channelInfo.webhookToken };
+}
+
+export function getChannelInfo(channelName: string): IChannelData | null {
     const db = new sqlite(publicConfig.channelFile);
     const statement = db.prepare(
-        `SELECT webhookID, webhookToken FROM channels WHERE channel = (?)`
+        `SELECT channel as name, role, webhookID, webhookToken FROM channels WHERE channel = (?)`
     );
     const rows = statement.all(channelName);
     const num = rows.length;
@@ -44,14 +53,12 @@ export function getWebhookForChannel(channelName: string): IWebhook | null {
         return null;
     }
 
-    const ID: string = rows[0].webhookID;
-    const token: string = rows[0].webhookToken;
-
-    if (!ID || !token) {
-        return null;
-    }
-
-    return { ID, token };
+    return {
+        name: rows[0].name,
+        role: rows[0].role,
+        webhookID: rows[0].webhookID,
+        webhookToken: rows[0].webhookToken,
+    };
 }
 
 export function loadAllChannels(): IChannelData[] {

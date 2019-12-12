@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import * as publicConfig from "./config/public-config.json";
-import { tryToPostInSameChannel, canPostToChannel } from "./channels";
+import { canPostToChannel } from "./channels";
 import { getUserName } from "./knownUsers";
 import { sendMessageToChannel } from "./webhooks";
 

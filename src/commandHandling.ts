@@ -3,11 +3,19 @@ import { notifyAuthorOfFailure } from "./util";
 import * as knownCommands from "./knownCommands";
 import { getUserName } from "./knownUsers";
 import { tryToPostInSameChannel } from "./channels";
+import {
+    addMessageAuthorToChannel,
+    removeMessageAuthorFromChannel,
+} from "./userPermissions";
 
 /** Assumes this message starts with ! */
 export async function handleCommand(message: Discord.Message) {
     if (message.content.startsWith("!s/")) {
         await handleRegex(message);
+    } else if (message.content.startsWith("!+")) {
+        addChannel(message);
+    } else if (message.content.startsWith("!-")) {
+        removeChannel(message);
     } else {
         let commandName = message.content.split(/\s+/)[0];
         commandName = commandName.substring(1); // remove the !
@@ -68,6 +76,22 @@ export async function handleRegex(message: Discord.Message) {
     }
 }
 
+function addChannel(message: Discord.Message) {
+    const channel = getChannelFromMessage(message);
+    if (!channel) {
+        return;
+    }
+    addMessageAuthorToChannel(message, channel);
+}
+
+function removeChannel(message: Discord.Message) {
+    const channel = getChannelFromMessage(message);
+    if (!channel) {
+        return;
+    }
+    removeMessageAuthorFromChannel(message, channel);
+}
+
 async function getMessageToRegex(
     regexMessage: Discord.Message
 ): Promise<Discord.Message | null> {
@@ -93,4 +117,18 @@ async function getMessageToRegex(
     }
 
     return null;
+}
+
+function getChannelFromMessage(message: Discord.Message): string | null {
+    const channel = message.content.substring("!+".length);
+    if (channel === "") {
+        return null;
+    }
+    if (channel === "admin-chat") {
+        return null; // nice try
+    }
+    if (channel === "general") {
+        return null;
+    }
+    return channel;
 }
