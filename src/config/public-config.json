@@ -3,5 +3,15 @@
 	"channelFile": "./data/channels.sqlite",
 	"generalChannel": "general",
 	"syncChannel": "nobs-chat",
-	"permittedChannels": ["general"]
+	"permittedChannels": [
+		"general",
+		"gibby-luv",
+		"aladdin",
+		"movie-club",
+		"travel",
+		"age-of-empires",
+		"wisconsin",
+		"metal",
+		"work-shit"
+	]
 }

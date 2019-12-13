@@ -5,23 +5,18 @@ import { getUserName } from "./knownUsers";
 import { sendMessageToChannel } from "./webhooks";
 
 export function syncToGeneral(message: Discord.Message) {
-    syncMessage(message, publicConfig.generalChannel);
+	syncMessage(message, publicConfig.generalChannel);
 }
 
 export function syncToNoBSChannel(message: Discord.Message) {
-    syncMessage(message, publicConfig.syncChannel);
+	syncMessage(message, publicConfig.syncChannel);
 }
 
 function syncMessage(message: Discord.Message, channel: string) {
-    if (!canPostToChannel(channel)) {
-        return;
-    }
+	if (!canPostToChannel(channel)) {
+		return;
+	}
 
-    const avatarURL = message.author.avatarURL;
-    sendMessageToChannel(
-        channel,
-        message.content,
-        getUserName(message.member),
-        avatarURL
-    );
+	const avatarURL = message.author.avatarURL;
+	sendMessageToChannel(channel, message.cleanContent, getUserName(message.member), avatarURL);
 }
