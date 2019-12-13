@@ -27,7 +27,7 @@
 
 # Enabling beardslave for new channels
 
-**2019-12-11:** you can skip adding the webhook; beardslave will create one for you!
+**2019-12-11**: you can skip adding the webhook; beardslave will create one for you!
 
 -   Add the webhook to the channel
     -   Go to channel settings -> Webhooks
