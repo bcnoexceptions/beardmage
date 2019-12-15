@@ -3,51 +3,60 @@ import { getChannelInfo } from "./database";
 import { notifyAuthorOfFailure } from "./util";
 import { findRole } from "./roles";
 
-export function addMessageAuthorToChannel(
-    message: Discord.Message,
-    channelName: string
-) {
-    const roleName = getRoleNameForChannel(channelName);
-    const role = findRole(message.guild, roleName);
-    if (!role) {
-        notifyAuthorOfFailure(
-            message,
-            `Could not find role for channel ${channelName}`
-        );
-        return;
-    }
+export async function addMessageAuthorToChannel(
+	message: Discord.Message,
+	channelName: string,
+	notifySender?: boolean
+): Promise<void> {
+	const roleName = getRoleNameForChannel(channelName);
+	const role = findRole(message.guild, roleName);
+	if (!role) {
+		notifyAuthorOfFailure(message, `Could not find role for channel ${channelName}`);
+		return;
+	}
 
-    message.member.addRole(role);
-    message.author.send(`Added channel ${channelName}`);
+	await message.member.addRole(role);
+	if (notifySender) {
+		await message.author.send(`Added channel ${channelName}`);
+	}
 }
 
-export function removeMessageAuthorFromChannel(
-    message: Discord.Message,
-    channelName: string
-) {
-    const roleName = getRoleNameForChannel(channelName);
-    const role = findRole(message.guild, roleName);
-    if (!role) {
-        notifyAuthorOfFailure(
-            message,
-            `Could not find role for channel ${channelName}`
-        );
-        return;
-    }
+export async function removeMessageAuthorFromChannel(
+	message: Discord.Message,
+	channelName: string,
+	notifySender?: boolean
+): Promise<void> {
+	const roleName = getRoleNameForChannel(channelName);
+	const role = findRole(message.guild, roleName);
+	if (!role) {
+		notifyAuthorOfFailure(message, `Could not find role for channel ${channelName}`);
+		return;
+	}
 
-    message.member.removeRole(role);
-    message.author.send(`Removed channel ${channelName}`);
+	await message.member.removeRole(role);
+	if (notifySender) {
+		await message.author.send(`Removed channel ${channelName}`);
+	}
 }
 
 function getRoleNameForChannel(channelName: string): string | null {
-    const channelInfo = getChannelInfo(channelName);
-    if (!channelInfo) {
-        return null;
-    }
+	const channelInfo = getChannelInfo(channelName);
+	if (!channelInfo) {
+		return null;
+	}
 
-    if (!channelInfo.role) {
-        return null;
-    }
+	if (!channelInfo.role) {
+		return null;
+	}
 
-    return channelInfo.role;
+	return channelInfo.role;
+}
+
+export function userHasChannel(user: Discord.GuildMember, channelName: string): boolean {
+	const roleName = getRoleNameForChannel(channelName);
+
+	if (user.roles.find(role => role.name === roleName)) {
+		return true;
+	}
+	return false;
 }

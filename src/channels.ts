@@ -1,4 +1,4 @@
-import { getWebhookForChannel } from "./database";
+import { getWebhookForChannel, loadAllChannels } from "./database";
 import * as Discord from "discord.js";
 import { sendMessageToChannel } from "./webhooks";
 import { notifyAuthorOfFailure } from "./util";
@@ -91,6 +91,20 @@ export async function createChannel(
 	console.log("added role " + roleName + " to #" + channelName);
 
 	return channel;
+}
+
+const SpecialChannels = ["", "admin-chat", "general", "nobs-chat", "xcoolevents"];
+
+export function getNonSpecialChannels(): IChannelData[] {
+	const allChannels = loadAllChannels();
+	for (let i = allChannels.length - 1; i >= 0; i--) {
+		const name = allChannels[i].name;
+
+		if (SpecialChannels.indexOf(name) >= 0) {
+			allChannels.splice(i, 1);
+		}
+	}
+	return allChannels;
 }
 
 export interface IChannelData {

@@ -9,6 +9,7 @@
 -   `npm i discord.js @types/node better-sqlite3 @types/better-sqlite3`
 -   Create webhook, retrieve it's ID and token
 -   Copy private-config.json.copyme to private-config.json, fill it in
+-   Fill in the friend codes spreadsheet link
 
 ## SQL
 
@@ -18,6 +19,8 @@
 -   Run `bash load-private.sh`
 
 # Creating new channels
+
+**2019-12-15**: You don't need to issue the sqlite command yourself anymore; just run the shell script `./add-channel.sh <channel> <role>` to update SQL.
 
 -   Add the channel to channels.sqlite:
 -   `cd beardslave/data`
