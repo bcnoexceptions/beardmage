@@ -46,12 +46,25 @@ export async function findOrCreateChannel(
 	channelName: string,
 	roleName: string
 ): Promise<Discord.TextChannel> {
-	const channel = findChannel(server, channelName);
-	if (channel) {
-		return channel; // assume the role is right
+	const role = await findOrCreateRole(server, roleName);
+
+	let channel = findChannel(server, channelName);
+	if (!channel) {
+		channel = await createChannel(server, channelName, roleName);
+
+		await channel.overwritePermissions(role, {
+			SEND_MESSAGES: true,
+			EMBED_LINKS: true,
+			ADD_REACTIONS: true,
+			ATTACH_FILES: true,
+			READ_MESSAGE_HISTORY: true,
+			READ_MESSAGES: true,
+		});
+
+		console.log("added role " + roleName + " to #" + channelName);
 	}
 
-	return createChannel(server, channelName, roleName);
+	return channel;
 }
 
 export function findChannel(server: Discord.Guild, channelName: string): Discord.TextChannel | null {
@@ -76,19 +89,6 @@ export async function createChannel(
 	const channel = (await server.createChannel(channelName, { type: "text" })) as Discord.TextChannel;
 
 	console.log("created channel " + channelName);
-
-	const role = await findOrCreateRole(server, roleName);
-
-	await channel.overwritePermissions(role, {
-		SEND_MESSAGES: true,
-		EMBED_LINKS: true,
-		ADD_REACTIONS: true,
-		ATTACH_FILES: true,
-		READ_MESSAGE_HISTORY: true,
-		READ_MESSAGES: true,
-	});
-
-	console.log("added role " + roleName + " to #" + channelName);
 
 	return channel;
 }
