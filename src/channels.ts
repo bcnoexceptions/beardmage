@@ -2,7 +2,7 @@ import { getWebhookForChannel, loadAllChannels } from "./database";
 import * as Discord from "discord.js";
 import { sendMessageToChannel } from "./webhooks";
 import { notifyAuthorOfFailure } from "./util";
-import { findOrCreateRole } from "./roles";
+import { findOrCreateRole, findRole } from "./roles";
 
 export function canPostToChannel(channelName: string): boolean {
 	return !!getWebhookForChannel(channelName);
@@ -51,6 +51,18 @@ export async function findOrCreateChannel(
 	let channel = findChannel(server, channelName);
 	if (!channel) {
 		channel = await createChannel(server, channelName, roleName);
+
+		const everyoneRole = await findRole(server, "@everyone");
+		if (everyoneRole) {
+			await channel.overwritePermissions(everyoneRole, {
+				SEND_MESSAGES: false,
+				EMBED_LINKS: false,
+				ADD_REACTIONS: false,
+				ATTACH_FILES: false,
+				READ_MESSAGE_HISTORY: false,
+				READ_MESSAGES: false,
+			});
+		}
 
 		await channel.overwritePermissions(role, {
 			SEND_MESSAGES: true,
