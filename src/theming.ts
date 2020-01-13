@@ -5,6 +5,8 @@ import * as publicConfig from "./config/public-config.json";
 import { tryToPostInSameChannel } from "./channels";
 import { getUserName } from "./knownUsers";
 
+type EmojiList = Discord.Collection<string, Discord.Emoji>;
+
 export function themeIfAppropriate(message: Discord.Message): void {
 	if (!isPersonThemed(message.author.username)) {
 		return;
@@ -14,7 +16,9 @@ export function themeIfAppropriate(message: Discord.Message): void {
 		return; // don't try to theme these
 	}
 
-	const newContent = replaceWithEmojis(message.content);
+	const emojis = message.guild.emojis;
+
+	const newContent = replaceWithEmojis(message.content, emojis);
 	if (newContent !== message.content) {
 		if (
 			tryToPostInSameChannel(
@@ -29,7 +33,7 @@ export function themeIfAppropriate(message: Discord.Message): void {
 	}
 }
 
-function replaceWithEmojis(content: string): string {
+function replaceWithEmojis(content: string, emojis: EmojiList): string {
 	const words = content.split(" ");
 
 	const replaceablesByLength = getSortedReplaceables();
@@ -39,7 +43,7 @@ function replaceWithEmojis(content: string): string {
 			continue; // don't break links
 		}
 
-		words[i] = subOneWord(words[i], replaceablesByLength);
+		words[i] = subOneWord(words[i], replaceablesByLength, emojis);
 	}
 
 	return words.join(" ");
@@ -55,25 +59,27 @@ function getSortedReplaceables(): string[] {
 	return replaceablesByLength;
 }
 
-function subOneWord(word: string, replaceablesByLength: string[]): string {
+function subOneWord(
+	word: string,
+	replaceablesByLength: string[],
+	emojis: EmojiList
+): string {
 	const theme: IStringMap<string> = publicConfig.theme;
-
-	// first replace everything with ##REPLACE{i}##
 
 	for (let i = 0; i < replaceablesByLength.length; i++) {
 		const oldText = replaceablesByLength[i];
-		const replacement = `##REPLACE${i}##`;
+		const replacementName = theme[replaceablesByLength[i]];
+		const selectedEmoji = emojis.find(e => e.name === replacementName);
 
-		word = replaceAllCaseInsensitive(word, oldText, replacement);
-	}
+		if (!selectedEmoji) {
+			continue;
+		}
 
-	// now replace ##REPLACE{i}## with the actual replacement. This way we don't double-replace stuff
-
-	for (let i = 0; i < replaceablesByLength.length; i++) {
-		const oldText = `##REPLACE${i}##`;
-		const replacement = theme[replaceablesByLength[i]];
-
-		word = replaceAllCaseInsensitive(word, oldText, replacement);
+		word = replaceAllCaseInsensitive(
+			word,
+			oldText,
+			selectedEmoji.toString()
+		);
 	}
 
 	return word;
