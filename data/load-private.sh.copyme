@@ -27,3 +27,7 @@ sqlite3 channels.sqlite "insert into channels values('movie-club', 'movie club',
 sqlite3 channels.sqlite "insert into channels values('age-of-empires', 'AOE', '', '');"
 sqlite3 channels.sqlite "insert into channels values('bloodstained-spoilers', 'Bloodstained', '', '');"
 sqlite3 channels.sqlite "insert into channels values('sekiro-spoilers', 'Sekiro', '', '');"
+
+sqlite3 channels.sqlite 'DROP TABLE IF EXISTS themedPeople;'
+
+sqlite3 channels.sqlite 'CREATE TABLE themedPeople ( person TEXT );'
