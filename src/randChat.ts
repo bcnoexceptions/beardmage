@@ -9,20 +9,20 @@ export function randChat(message: Discord.Message, start: string, middle: string
 	}
 	let rNum = Math.floor(Math.random() * Math.floor(max)) + 1;
 	result = start;
-	for (int i = 0; i < rNum; i++) {
+	for (let i: number = 0; i < rNum; i++) {
 		result += middle;
 	}
 	result += end;
 	
 	rNum = Math.random();
 	
-	if (rNum < .125) {  //Same as 1/8 chance which is what is was in coolchat
+	if (rNum < .125) {  //Same as 1/8 chance which is what it was in coolchat
 		result += randAppend;
 	}
 	
 	rNum = Math.floor(Math.random() * 4) + 1;
 	
-	for (int i = 0; i < rNum; i++){
+	for (let i: number = 0; i < rNum; i++){
 		result += punc;
 	}
 	
