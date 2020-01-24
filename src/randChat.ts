@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 import { getUserName } from "./knownUsers";
 import { tryToPostInSameChannel } from "./channels";
 
-export function randChat(message: Discord.Message, start: string, middle: string, end: string, randAppend: string, punc: string, isCap: string, max?: number ) {
+export function randChat(message: Discord.Message, start: string, middle: string, end: string, randAppend: string, punc: string, isCap: boolean, max?: number ) {
 	let result: string;
 	if ((!max) || (max===0)) {
 		max = 45;
