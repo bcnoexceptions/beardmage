@@ -5,4 +5,4 @@ export default function process(message: Discord.Message): void {
     handleInsultOrCompliment("insult", message);
 }
 
-process.help = "!compliment <person>";
+process.help = "!insult <person>";
