@@ -35,8 +35,6 @@ export default function process(message: Discord.Message): void {
 		//TODO: case 9 : slashComment(random user)
 	}
 
-	result = getUserName(message.member) + result;
-
 	tryToPostInSameChannel(message, result, getUserName(message.member), "Can't spoof on this channel");
 }
 

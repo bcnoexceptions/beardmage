@@ -1,5 +1,4 @@
 import * as Discord from "discord.js";
-import { randChat } from "../randChat";
 import { tryToPostInSameChannel } from "../channels";
 import { getUserName } from "../knownUsers";
 
