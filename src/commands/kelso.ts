@@ -1,5 +1,5 @@
 import * as Discord from "discord.js";
-import { randChat } from "../randChat.ts"
+import { randChat } from "../randChat"
 
 export default function process(message: Discord.Message): void {
     randChat(message, "B", "U", "RN", "!  EPIC BURN", "!", Math.random() < 0.5);

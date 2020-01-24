@@ -25,8 +25,8 @@ export function randChat(
 
 	rNum = Math.random();
 
-	if (rNum < .125 && randAppend) {  
-    //Same as 1/8 chance which is what it was in coolchat
+	if ((rNum < .125) && randAppend) {  
+		//Same as 1/8 chance which is what it was in coolchat
 		result += randAppend;
 	}
 	
