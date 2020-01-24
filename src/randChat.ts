@@ -7,9 +7,9 @@ export function randChat(
 	start: string,
 	middle: string,
 	end: string,
-	randAppend: string,
-	punc: string,
-	isCap: boolean,
+	randAppend?: string,
+	punc?: string,
+	isCap?: boolean,
 	max?: number
 ) {
 	let result: string;
@@ -25,15 +25,17 @@ export function randChat(
 
 	rNum = Math.random();
 
-	if (rNum < 0.125) {
-		//Same as 1/8 chance which is what is was in coolchat
+	if (rNum < .125 && randAppend) {  
+    //Same as 1/8 chance which is what it was in coolchat
 		result += randAppend;
 	}
+	
+	if (punc) {
+		rNum = Math.floor(Math.random() * 4) + 1;
 
-	rNum = Math.floor(Math.random() * 4) + 1;
-
-	for (let i: number = 0; i < rNum; i++) {
-		result += punc;
+		for (let i: number = 0; i < rNum; i++) {
+			result += punc;
+		}
 	}
 
 	if (!isCap) {
