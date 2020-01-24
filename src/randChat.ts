@@ -32,7 +32,7 @@ export function randChat(
 
 	rNum = Math.floor(Math.random() * 4) + 1;
 
-	for (let i = 0; i < rNum; i++) {
+	for (let i: number = 0; i < rNum; i++) {
 		result += punc;
 	}
 
