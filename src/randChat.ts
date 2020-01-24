@@ -10,15 +10,15 @@ export function randChat(
 	randAppend?: string,
 	punc?: string,
 	isCap?: boolean,
-	max?: number
-) {
+	max?: number)
+{
 	let result: string;
 	if (!max || max === 0) {
 		max = 45;
 	}
 	let rNum = Math.floor(Math.random() * Math.floor(max)) + 1;
 	result = start;
-	for (let i = 0; i < rNum; i++) {
+	for (let i: number = 0; i < rNum; i++) {
 		result += middle;
 	}
 	result += end;
