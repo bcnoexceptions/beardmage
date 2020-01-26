@@ -3,7 +3,7 @@ import { getRandomDatabaseOption } from "./database";
 import { tryToPostInSameChannel } from "./channels";
 import { getUserName } from "./knownUsers";
 
-export function handleInsultOrCompliment(which: string, message: Discord.Message) {
+export function handleInsultOrCompliment(which: string, message: Discord.Message, isPlomp?: boolean) {
 	const whom = message.content.substring(`!${which} `.length);
 	//Initialize all 3 tables as "which", handle "comment" specially
 	let table1: string = which;
@@ -51,6 +51,25 @@ export function handleInsultOrCompliment(which: string, message: Discord.Message
 		result = `${whom}, you're ${article} ${part1} ${part2} ${part3}!`;
 	} else {
 		result = `You're ${article} ${part1} ${part2} ${part3}!`;
+	}
+
+	if (isPlomp) {
+		let plomp: string = "Plomp";
+		let words: string[] = result.split(" ");
+		let len: number = words.length;
+		result = "";
+		for (let word of words) {
+			let rand: number = Math.floor(Math.random() * len);
+			if (rand === 0) {
+				result += plomp;
+			} else {
+				result += word;
+			}
+
+			result += " ";
+		}
+
+		result = result.substring(0, result.length - 1);  //Truncate trailing space.
 	}
 
 	tryToPostInSameChannel(message, result, getUserName(message.member), "Can't spoof on this channel");
