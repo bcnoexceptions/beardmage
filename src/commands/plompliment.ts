@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 import { handleInsultOrCompliment } from "../insultOrCompliment";
 
 export default function process(message: Discord.Message): void {
-    handleInsultOrCompliment("compliment", message);
+    handleInsultOrCompliment("compliment", message, true);
 }
 
-process.help = "!compliment <person>";
+process.help = "!plompliment <person>";
