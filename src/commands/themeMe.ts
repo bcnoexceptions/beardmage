@@ -8,3 +8,4 @@ export default function process(message: Discord.Message): void {
 }
 
 process.help = "put sweet emojis in your messages";
+process.disabled = true;

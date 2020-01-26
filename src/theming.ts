@@ -7,9 +7,15 @@ import { getUserName } from "./knownUsers";
 
 type EmojiList = Discord.Collection<string, Discord.Emoji>;
 
+const ThemingIsOn = false;
+
 export function themeIfAppropriate(message: Discord.Message): void {
 	if (!isPersonThemed(message.author.username)) {
 		return;
+	}
+
+	if (!ThemingIsOn) {
+		return; //*BC people didn't like this, put in an off switch for now
 	}
 
 	if (message.embeds && message.embeds.length > 0) {
@@ -20,14 +26,7 @@ export function themeIfAppropriate(message: Discord.Message): void {
 
 	const newContent = replaceWithEmojis(message.content, emojis);
 	if (newContent !== message.content) {
-		if (
-			tryToPostInSameChannel(
-				message,
-				newContent,
-				getUserName(message.member),
-				"Can't theme on this channel"
-			)
-		) {
+		if (tryToPostInSameChannel(message, newContent, getUserName(message.member), "Can't theme on this channel")) {
 			message.delete();
 		}
 	}
@@ -59,11 +58,7 @@ function getSortedReplaceables(): string[] {
 	return replaceablesByLength;
 }
 
-function subOneWord(
-	word: string,
-	replaceablesByLength: string[],
-	emojis: EmojiList
-): string {
+function subOneWord(word: string, replaceablesByLength: string[], emojis: EmojiList): string {
 	const theme: IStringMap<string> = publicConfig.theme;
 
 	for (let i = 0; i < replaceablesByLength.length; i++) {
@@ -75,21 +70,13 @@ function subOneWord(
 			continue;
 		}
 
-		word = replaceAllCaseInsensitive(
-			word,
-			oldText,
-			selectedEmoji.toString()
-		);
+		word = replaceAllCaseInsensitive(word, oldText, selectedEmoji.toString());
 	}
 
 	return word;
 }
 
-function replaceAllCaseInsensitive(
-	original: string,
-	from: string,
-	to: string
-): string {
+function replaceAllCaseInsensitive(original: string, from: string, to: string): string {
 	// https://stackoverflow.com/questions/7313395/case-insensitive-replace-all
 
 	// first escape chars with regex meaning
