@@ -59,7 +59,7 @@ export function handleInsultOrCompliment(which: string, message: Discord.Message
 		let len: number = words.length;
 		result = "";
 		for (let word of words) {
-			let rand: number = Math.floor(Math.random() * len);
+			let rand: number = Math.floor(Math.random() * len/2);
 			if (rand === 0) {
 				result += plomp;
 			} else {
