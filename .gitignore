@@ -6,3 +6,4 @@ data/load-private.sql
 src/config/private-config.json.realserver
 src/config/private-config.json.testbed
 data/load-private.sh
+.vscode
