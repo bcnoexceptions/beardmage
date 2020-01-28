@@ -1,15 +1,13 @@
-/** THIS COMMAND DOES NOTHING! It's just a template! */
-
 import * as Discord from "discord.js";
 import { tryToPostInSameChannel } from "../channels";
 import { getUserName } from "../knownUsers";
 
 export default function process(message: Discord.Message): void {
-	const result: string = message.author.username + " reads a message scrawled on the ground: " + generateSaying();
-	tryToPostInSameChannel(message, generateSaying(), "beardslave", "Can't spoof on this channel");
+	const result: string = message.author.username + " reads a message scrawled on the ground: " + generateDarkSoulsSaying();
+	tryToPostInSameChannel(message, result, "beardslave", "Can't spoof on this channel");
 }
 
-export function generateSaying(): string {
+export function generateDarkSoulsSaying(): string {
 	let saying: string = "";
 
 	let base: string = "";  //Get from DB
@@ -25,7 +23,8 @@ export function generateSaying(): string {
 	}
 
 	//Send the saying
-	return saying;
+	//return saying;
+	return "Praise the Sun!";
 }
 
 // uncomment to support !help
@@ -53,4 +52,4 @@ Miracles,Jumping off,Sliding down,Dashing through,Rolling,Backstepping,Jumping,A
 Blocking,Parrying,Locking on,Path,Hidden path,Shortcut,Detour,Illusionary wall,Shortcut,Dead end,Swamp,Lava,Forest,Cave,Labyrinth,Safe zone,
 Danger zone,Sniper spot,Bright spot,Dark spot,Open area,Tight spot,Hidden place,Exchange,Gorgeous view,Fall,Front,Back,Left,Right,Up,Down,
 Feet,Head,Neck,Stomach,Back,Arm,Leg,Heel,Rear,Tail,Wings,Anywhere,Strike,Thrust,Slash,Magic,Fire,Lightning,Critical hits,Bleeding,
-Poison,Strong poison,Curses,Divine,Occult,Crystal,Chance,Hint,Secret,Happiness,Sorrow,Life,Death,Undead,Elation,Grief,Hope,Despair,Light,Dark,Bravery,Resignation,Comfort,Tears"/*
+Poison,Strong poison,Curses,Divine,Occult,Crystal,Chance,Hint,Secret,Happiness,Sorrow,Life,Death,Undead,Elation,Grief,Hope,Despair,Light,Dark,Bravery,Resignation,Comfort,Tears"*/
