@@ -27,7 +27,7 @@ Feet,Head,Neck,Stomach,Back,Arm,Leg,Heel,Rear,Tail,Wings,Anywhere,Strike,Thrust,
 Poison,Strong poison,Curses,Divine,Occult,Crystal,Chance,Hint,Secret,Happiness,Sorrow,Life,Death,Undead,Elation,Grief,Hope,Despair,Light,Dark,Bravery,Resignation,Comfort,Tears"*/
 
 export default function process(message: Discord.Message): void {
-	const result: string = "*" + message.author.username + " reads a message scrawled on the ground:* " + generateDarkSoulsSaying();
+	const result: string = "*" + getUserName(message.member) + " reads a message scrawled on the ground:* " + generateDarkSoulsSaying();
 	tryToPostInSameChannel(message, result, "beardslave", "Can't spoof on this channel");
 }
 
