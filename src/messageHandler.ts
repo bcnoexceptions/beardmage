@@ -55,6 +55,7 @@ export async function updateHandler(
 	const channelName = (oldMessage.channel as Discord.TextChannel).name;
 
 	if (channelName === publicConfig.generalChannel) {
+		newMessage.content = "Edit: " + newMessage.content;
 		// let #nobs-chat know about the update
 		syncToNoBSChannel(newMessage);
 	}
