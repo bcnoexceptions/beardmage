@@ -40,3 +40,22 @@ export async function messageHandler(
 		themeIfAppropriate(message);
 	}
 }
+
+export async function updateHandler(
+	client: Discord.Client,
+	oldMessage: Discord.Message,
+	newMessage: Discord.Message) {
+	if (oldMessage.author.bot) {
+		return;
+	}
+
+	if (oldMessage.channel.type === "dm") {
+		return;
+	}
+	const channelName = (oldMessage.channel as Discord.TextChannel).name;
+
+	if (channelName === publicConfig.generalChannel) {
+		// let #nobs-chat know about the update
+		syncToNoBSChannel(newMessage);
+	}
+}
