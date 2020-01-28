@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 import * as privateConfig from "./config/private-config.json";
 import * as knownUsers from "./knownUsers";
 import * as knownCommands from "./knownCommands";
-import { messageHandler } from "./messageHandler";
+import { messageHandler, updateHandler } from "./messageHandler";
 import { syncServer } from "./serverSetup";
 
 const client = new Discord.Client();
@@ -24,6 +24,10 @@ client.on(
 
 client.on("message", async (message: Discord.Message) => {
     messageHandler(client, message);
+});
+
+client.on("messageUpdate", async (oldMessage: Discord.Message, newMessage: Discord.Message) => {
+	updateHandler(client, oldMessage, newMessage)
 });
 
 client.login(privateConfig.token);
