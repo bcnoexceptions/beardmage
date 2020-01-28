@@ -3,11 +3,9 @@ import { handleCommand } from "./commandHandling";
 import * as publicConfig from "./config/public-config.json";
 import { syncToGeneral, syncToNoBSChannel } from "./sync";
 import { themeIfAppropriate } from "./theming";
+import { ChatSlave } from "./chimingIn/contextualResponses";
 
-export async function messageHandler(
-	client: Discord.Client,
-	message: Discord.Message
-) {
+export async function messageHandler(client: Discord.Client, message: Discord.Message) {
 	if (message.author.bot) {
 		return;
 	}
@@ -37,8 +35,10 @@ export async function messageHandler(
 	} else if (channelName === publicConfig.generalChannel) {
 		// sync to #nobs-chat
 		syncToNoBSChannel(message);
-		themeIfAppropriate(message);
 	}
+
+	themeIfAppropriate(message);
+	ChatSlave.getInstance().processMessage(message);
 }
 
 export async function updateHandler(
