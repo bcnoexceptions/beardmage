@@ -6,10 +6,14 @@
 
 -   `npm update`
 -   `npm i -G typescript ts-node`
--   `npm i discord.js @types/node better-sqlite3 @types/better-sqlite3`
+-   `npm i discord.js @types/node better-sqlite3 @types/better-sqlite3`  (run in the beardslave directory, it needs package.json)
 -   Create webhook, retrieve it's ID and token
 -   Copy private-config.json.copyme to private-config.json, fill it in
 -   Fill in the friend codes spreadsheet link
+
+If you get errors relating to Python when trying to npm update and the like, run this:
+npm --add-python-to-path='true' --debug install --global windows-build-tools
+
 
 ## SQL
 
