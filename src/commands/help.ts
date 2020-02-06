@@ -7,11 +7,11 @@ export default function process(message: Discord.Message): void {
 
     for (const cmd of commands) {
         if (cmd.help) {
-            texts.push(cmd.help);
+            texts.push(`!${cmd.commandName}: ${cmd.help}`);
         }
     }
 
     message.author.send(texts.join("\n"));
 }
 
-process.help = "!help";
+process.help = "invoke the spirit of the Beatles";

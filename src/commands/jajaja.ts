@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 import { randChat } from "../randChat";
 
 export default function process(message: Discord.Message): void {
-	randChat(message, "JA", "JA", "JA", "", "!", Math.random() < 0.5, 12);
+    randChat(message, "JA", "JA", "JA", "", "!", Math.random() < 0.5, 12);
 }
 
-process.help = "!jajaja laughs in Spanish";
+process.help = "laughs";

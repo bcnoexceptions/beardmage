@@ -30,4 +30,4 @@ export default function process(message: Discord.Message): void {
     });
 }
 
-process.help = "!gis <jawnz>";
+process.help = "Google image search some jawnz";
