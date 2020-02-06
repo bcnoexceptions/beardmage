@@ -1,19 +1,71 @@
 import * as Discord from "discord.js";
 import { IStringMap } from "./util";
 
-const knownUsers: IStringMap<Discord.GuildMember> = {};
+export class UserManager {
+    private static Instance: UserManager | null = null;
 
-export async function loadUsers(server: Discord.Guild) {
-    const fullGuild = await server.fetchMembers();
-    const users = fullGuild.members.array();
-    for (const user of users) {
-        addUser(user);
+    private knownUsers: IStringMap<Discord.GuildMember>;
+    private constructor() {
+        this.knownUsers = {};
     }
-}
 
-export function addUser(user: Discord.GuildMember) {
-    const name = getUserName(user);
-    knownUsers[name.toUpperCase()] = user;
+    public static getInstance(): UserManager {
+        if (!UserManager.Instance) {
+            UserManager.Instance = new UserManager();
+        }
+
+        return UserManager.Instance;
+    }
+
+    public async loadUsers(server: Discord.Guild) {
+        const fullGuild = await server.fetchMembers();
+        const users = fullGuild.members.array();
+        for (const user of users) {
+            this.addUser(user);
+        }
+    }
+
+    public addUser(user: Discord.GuildMember) {
+        const name = getUserName(user);
+        this.knownUsers[name.toUpperCase()] = user;
+    }
+
+    public renameUser(
+        oldUser: Discord.GuildMember,
+        newUser: Discord.GuildMember
+    ) {
+        delete this.knownUsers[getUserName(oldUser).toUpperCase()];
+        this.addUser(newUser);
+    }
+
+    public lookupUser(name: string): Discord.GuildMember | null {
+        if (this.knownUsers[name.toUpperCase()]) {
+            return this.knownUsers[name.toUpperCase()];
+        }
+
+        if (name.startsWith("<@")) {
+            let id: string;
+            if (name[2] === "!") {
+                id = name.slice("<@!".length, -1);
+            } else {
+                id = name.slice("<@".length, -1);
+            }
+
+            for (const userName of Object.keys(this.knownUsers)) {
+                if (this.knownUsers[userName].id === id) {
+                    return this.knownUsers[userName];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public logUsers() {
+        for (const name of Object.keys(this.knownUsers)) {
+            console.log(getUserName(this.knownUsers[name]));
+        }
+    }
 }
 
 export function getUserName(user: Discord.GuildMember) {
@@ -22,41 +74,4 @@ export function getUserName(user: Discord.GuildMember) {
         name = user.user.username;
     }
     return name;
-}
-
-export function renameUser(
-    oldUser: Discord.GuildMember,
-    newUser: Discord.GuildMember
-) {
-    delete knownUsers[getUserName(oldUser).toUpperCase()];
-    addUser(newUser);
-}
-
-export function lookupUser(name: string): Discord.GuildMember | null {
-    if (knownUsers[name.toUpperCase()]) {
-        return knownUsers[name.toUpperCase()];
-    }
-
-    if (name.startsWith("<@")) {
-        let id: string;
-        if (name[2] === "!") {
-            id = name.slice("<@!".length, -1);
-        } else {
-            id = name.slice("<@".length, -1);
-        }
-
-        for (const userName of Object.keys(knownUsers)) {
-            if (knownUsers[userName].id === id) {
-                return knownUsers[userName];
-            }
-        }
-    }
-
-    return null;
-}
-
-export function logUsers() {
-    for (const name of Object.keys(knownUsers)) {
-        console.log(getUserName(knownUsers[name]));
-    }
 }

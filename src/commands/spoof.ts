@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import { notifyAuthorOfFailure } from "../util";
-import { lookupUser, getUserName } from "../knownUsers";
+import { getUserName, UserManager } from "../knownUsers";
 import { tryToPostInSameChannel } from "../channels";
 
 export default function process(message: Discord.Message): void {
@@ -16,7 +16,7 @@ export default function process(message: Discord.Message): void {
     let spoofText = message.content.substring(userPos + userToSpoof.length + 1);
     spoofText = "**" + spoofText; // so people know it's a spoof
 
-    const knownUserRecord = lookupUser(userToSpoof);
+    const knownUserRecord = UserManager.getInstance().lookupUser(userToSpoof);
 
     let userName: string, avatar: string;
     if (knownUserRecord) {
