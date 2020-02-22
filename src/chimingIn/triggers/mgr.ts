@@ -69,7 +69,7 @@ export class MGRPrettyUnlikely implements IBotTrigger {
 
 export class MGROkay implements IBotTrigger {
 	public doesMessageApply(message: Discord.Message): boolean {
-		return !!message.content.match(/okay/i);
+		return !!message.content.match(/sounds okay|seems okay/i);
 	}
 
 	public react(message: Discord.Message): void {
