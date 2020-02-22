@@ -52,6 +52,14 @@ export async function updateHandler(
 	if (oldMessage.channel.type === "dm") {
 		return;
 	}
+
+	const oldText: string = oldMessage.content;
+	const newText: string = newMessage.content;
+
+	if (oldText == newText) {
+		return;
+	}
+
 	const channelName = (oldMessage.channel as Discord.TextChannel).name;
 
 	if (channelName === publicConfig.generalChannel) {
