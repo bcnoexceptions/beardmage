@@ -9,6 +9,7 @@ export function handleInsultOrCompliment(which: string, message: Discord.Message
 	let table1: string = which;
 	let table2: string = which;
 	let table3: string = which;
+	let punct: string = "!";
 	if (which === "comment") {		
 		const rNum = Math.floor(Math.random() * 8);
 		//3-bit integer determines each of the 3 tables, 000-111
@@ -38,6 +39,8 @@ export function handleInsultOrCompliment(which: string, message: Discord.Message
 		} else {
 			table3 = "compliment";
 		}
+		
+		punct = ".";
 	}
 	const part1: string = getRandomDatabaseOption(table1 + "1");
 	const part2: string = getRandomDatabaseOption(table2 + "2");
@@ -48,9 +51,9 @@ export function handleInsultOrCompliment(which: string, message: Discord.Message
 
 	let result: string;
 	if (whom) {
-		result = `${whom}, you're ${article} ${part1} ${part2} ${part3}!`;
+		result = `${whom}, you're ${article} ${part1} ${part2} ${part3}` + punct;
 	} else {
-		result = `You're ${article} ${part1} ${part2} ${part3}!`;
+		result = `You're ${article} ${part1} ${part2} ${part3}` + punct;
 	}
 
 	if (isPlomp) {
