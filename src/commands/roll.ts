@@ -8,7 +8,9 @@ export default function process(message: Discord.Message): void {
         rollRequest = parseInput(message.content);
     }
     catch {
-        notifyAuthorOfFailure(message, "Invalid format. !roll XdY <optional [+-]Z> <optional label>")
+        let failMessage: string = "Invalid format. !roll XdY <optional [+-]Z> <optional label>.\n";
+        failMessage += "Maximum of 50 dice. 1d100 is the largest die size available, and you can't add or subtract more than 999";
+        notifyAuthorOfFailure(message, failMessage);
         return;
     }
 
@@ -34,11 +36,11 @@ export default function process(message: Discord.Message): void {
         }
     }
 
-    const resultMessage: string = ConstructChannelMessage(rollRequest, dieRollStr, sum);
+    const resultMessage: string = constructChannelMessage(rollRequest, dieRollStr, sum);
     message.channel.send(resultMessage);
 }
 
-function ConstructChannelMessage(rollRequest: DieRollRequest, dieRollStr: string, sum:number): string {
+function constructChannelMessage(rollRequest: DieRollRequest, dieRollStr: string, sum:number): string {
     let resultMessage = "";
     if (rollRequest.label) {
         resultMessage = `${rollRequest.label}\n`;
@@ -48,9 +50,9 @@ function ConstructChannelMessage(rollRequest: DieRollRequest, dieRollStr: string
         resultMessage += `${rollRequest.modifierOperand}${rollRequest.modifier}`;
     }
 
-    resultMessage += `\n${sum}`;
+    resultMessage += `\n${dieRollStr}`;
     if (rollRequest.modifier || rollRequest.numDice > 1) {
-        resultMessage += ` (${dieRollStr})`;
+        resultMessage += ` (total: ${sum})`;
     }
     return resultMessage; 
 }
