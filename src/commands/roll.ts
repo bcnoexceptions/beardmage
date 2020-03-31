@@ -8,7 +8,7 @@ export default function process(message: Discord.Message): void {
         rollRequest = parseInput(message.content);
     }
     catch {
-        notifyAuthorOfFailure(message, "Invalid format. !roll XdY <optional label>")
+        notifyAuthorOfFailure(message, "Invalid format. !roll XdY <optional [+-]Z> <optional label>")
         return;
     }
 
