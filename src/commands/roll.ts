@@ -1,6 +1,8 @@
 
 import * as Discord from "discord.js";
 import { notifyAuthorOfFailure } from "../util";
+import { tryToPostInSameChannel } from "../channels";
+import { getUserName } from "../knownUsers";
 
 export default function process(message: Discord.Message): void {
     let rollRequest: DieRollRequest;
@@ -37,7 +39,7 @@ export default function process(message: Discord.Message): void {
     }
 
     const resultMessage: string = constructChannelMessage(rollRequest, dieRollStr, sum);
-    message.channel.send(resultMessage);
+    tryToPostInSameChannel(message,resultMessage,getUserName(message.member),null);
 }
 
 function constructChannelMessage(rollRequest: DieRollRequest, dieRollStr: string, sum:number): string {
@@ -58,7 +60,7 @@ function constructChannelMessage(rollRequest: DieRollRequest, dieRollStr: string
 }
 
 //aka Mr. Sticky learns to regex 
-//Accepts commands in the format !roll 1d6+modifier labeltext, where modifier and labeltext are optional
+//Accepts commands in the format !roll 1d6+-modifier labeltext, where modifier and labeltext are optional
 function parseInput(commandText: string): DieRollRequest {
 
     const rollInfo: RegExpMatchArray | null = commandText.match(/(!roll)\s+(\d+)\s*[Dd]\s*(\d+)\s*(([+-])\s*(\d+)){0,1}(.*)/)
