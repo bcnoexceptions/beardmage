@@ -18,6 +18,9 @@ export async function syncServer(server: Discord.Guild) {
         );
 
         const webhook = await findOrCreateWebhookForChannel(channel);
+        if (webhook.token === null) {
+            throw new Error(`Webhook for channel ${oneChannel.name} has no token`);
+        }
         if (oneChannel.webhookID !== webhook.id) {
             // record it in the database!
             updateChannelRowWithWebhook(
