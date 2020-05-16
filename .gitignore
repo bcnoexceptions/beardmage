@@ -5,5 +5,6 @@ data/channels.sqlite
 data/load-private.sql
 src/config/private-config.json.realserver
 src/config/private-config.json.testbed
+src/config/google-key.json
 data/load-private.sh
 .vscode
