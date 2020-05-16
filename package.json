@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"description": "beardslave",
 	"dependencies": {
+		"@google-cloud/language": "^4.0.0",
 		"@types/better-sqlite3": "^5.4.0",
 		"@types/node": "^12.12.14",
 		"@types/sqlite3": "^3.1.5",
