@@ -1,3 +1,4 @@
+import { ChatSlaveHaiku } from "./triggers/haiku";
 import { WhatIsIt } from "./triggers/whatisit";
 import { ChatSlaveLunch } from "./triggers/lunch";
 import {
@@ -35,6 +36,7 @@ export class ChatSlave {
 			new ChatSlaveLunch(),
 			new WhatIsIt(),
 			new UrMom(),
+			new ChatSlaveHaiku(),
 		];
 	}
 

@@ -12,6 +12,7 @@
 		"module-invalidate": "^1.0.1",
 		"sqlite-sync": "^0.3.9",
 		"sqlite3": "^4.1.0",
+		"syllable": "^4.1.0",
 		"ts-node": "^8.5.4",
 		"typescript": "^3.7.2"
 	},
