@@ -4,6 +4,7 @@ import { IStringMap } from "./../../util";
 
 import syllable = require("syllable");
 
+// check for haikus
 export class ChatSlaveHaiku implements IBotTrigger {
 	private lastSyllablesByChannel: IStringMap<number[]>;
 
