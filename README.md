@@ -1,6 +1,7 @@
 # NEWS
 
 -   2019-12-11: beardslave will now create new channels and webhooks for you!
+-   2020-08-23: Added a new NPR command!
 
 # Deployment Steps
 
