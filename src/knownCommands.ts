@@ -3,7 +3,7 @@ import * as Discord from "discord.js";
 import { IStringMap } from "./util";
 
 export interface ICommandHandler {
-    (message: Discord.Message): void;
+    (message: Discord.Message): Promise<void> | void;
     help: string | undefined;
     disabled: boolean | undefined;
     commandName: string | undefined;

@@ -23,7 +23,7 @@ export async function handleCommand(message: Discord.Message) {
         const command = knownCommands.getCommand(commandName);
         if (command) {
             try {
-                command(message);
+                await command(message);
             } catch (e) {
                 notifyAuthorOfFailure(
                     message,
@@ -123,7 +123,7 @@ function getChannelFromMessage(message: Discord.Message): string | null {
     const channel = message.content.substring("!+".length);
 
     const availableChannels = getNonSpecialChannels();
-    if (availableChannels.findIndex(avail => avail.name === channel) >= 0) {
+    if (availableChannels.findIndex((avail) => avail.name === channel) >= 0) {
         return channel;
     }
 
