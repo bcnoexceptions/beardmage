@@ -21,7 +21,7 @@ export default function process(message: Discord.Message): void {
     let userName: string, avatar: string;
     if (knownUserRecord) {
         userName = getUserName(knownUserRecord);
-        //avatar = knownUserRecord.user.avatarURL;
+        avatar = knownUserRecord.user.avatarURL;
     } else {
         userName = userToSpoof;
         avatar = "";
@@ -29,8 +29,8 @@ export default function process(message: Discord.Message): void {
 
     tryToPostInSameChannel(
         message,
-        username + ": " + spoofText,
-        "beardmage",
+        spoofText,
+        userName,
         "Can't spoof on this channel",
         avatar
     );
