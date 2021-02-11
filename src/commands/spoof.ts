@@ -14,14 +14,14 @@ export default function process(message: Discord.Message): void {
 
     const userPos = message.content.indexOf(userToSpoof);
     let spoofText = message.content.substring(userPos + userToSpoof.length + 1);
-    spoofText = "**" + spoofText; // so people know it's a spoof
+    spoofText = "`[spoof]`" + spoofText; // so people know it's a spoof
 
     const knownUserRecord = lookupUser(userToSpoof);
 
     let userName: string, avatar: string;
     if (knownUserRecord) {
         userName = getUserName(knownUserRecord);
-        avatar = knownUserRecord.user.avatarURL;
+        //avatar = knownUserRecord.user.avatarURL;
     } else {
         userName = userToSpoof;
         avatar = "";
@@ -29,8 +29,8 @@ export default function process(message: Discord.Message): void {
 
     tryToPostInSameChannel(
         message,
-        spoofText,
-        userName,
+        username + ": " + spoofText,
+        "beardmage",
         "Can't spoof on this channel",
         avatar
     );
