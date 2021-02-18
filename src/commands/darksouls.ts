@@ -32,12 +32,8 @@ export default function process(message: Discord.Message): void {
         getUserName(message.member) +
         " reads a message scrawled on the ground:* " +
         generateDarkSoulsSaying();
-    tryToPostInSameChannel(
-        message,
-        result,
-        "beardslave",
-        "Can't spoof on this channel"
-    );
+    
+    message.channel.send(result);
 }
 
 export function generateDarkSoulsSaying(): string {

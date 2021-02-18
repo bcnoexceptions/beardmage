@@ -1,44 +1,35 @@
 import * as Discord from "discord.js";
 import { getRandomDatabaseOption } from "./database";
-import { tryToPostInSameChannel } from "./channels";
-import { getUserName } from "./knownUsers";
 
-export function handleInsultOrCompliment(which: string, message: Discord.Message, isPlomp?: boolean) {
-	const whom = message.content.substring(`!${which} `.length);
+export enum ThreePartMessageType {
+	Compliment = 1,
+	Insult = 2,
+	Comment = 3,
+}
+
+interface NumberToString {
+	[which: number]: string;
+}
+const messageTypeToTable: NumberToString = {};
+messageTypeToTable[ThreePartMessageType.Compliment] = "compliment";
+messageTypeToTable[ThreePartMessageType.Insult] = "insult";
+messageTypeToTable[ThreePartMessageType.Comment] = "comment";
+
+
+export function handleInsultOrCompliment(which: ThreePartMessageType, message: Discord.Message, isPlomp?: boolean) {
+	const text = message.content;
+	const firstWord = text.split(/\s+/)[0];
+	const whom = message.content.substring(firstWord.length + 1);
+
 	//Initialize all 3 tables as "which", handle "comment" specially
-	let table1: string = which;
-	let table2: string = which;
-	let table3: string = which;
-	let punct: string = "!";
-	if (which === "comment") {		
-		const rNum = Math.floor(Math.random() * 8);
-		//3-bit integer determines each of the 3 tables, 000-111
-		/*000 = III
-		  001 = IIC
-		  010 = ICI
-		  011 = ICC
-		  100 = CII
-		  101 = CIC
-		  110 = CCI
-		  111 = CCC*/
-		//Most significant bit determines table 1
-		if (rNum < 4) {
-			table1 = "insult";
-		} else {
-			table1 = "compliment";
-		}
-		//2nd bit determines table 2
-		if (rNum % 4 === 0 || rNum % 4 === 1) {
-			table2 = "insult";
-		} else {
-			table2 = "compliment";
-		}
-		//Least significant bit determines table 3
-		if (rNum % 2 === 0) {
-			table3 = "insult";
-		} else {
-			table3 = "compliment";
-		}
+	let table1 = messageTypeToTable[which];
+	let table2 = messageTypeToTable[which];
+	let table3 = messageTypeToTable[which];
+	let punct = "!";
+	if (which === ThreePartMessageType.Comment) {		
+		table1 = randomSentimentTable();
+		table2 = randomSentimentTable();
+		table3 = randomSentimentTable();
 		
 		punct = ".";
 	}
@@ -56,24 +47,33 @@ export function handleInsultOrCompliment(which: string, message: Discord.Message
 		result = `You're ${article} ${part1} ${part2} ${part3}` + punct;
 	}
 
-	if (isPlomp) {
-		let plomp: string = "Plomp";
-		let words: string[] = result.split(" ");
-		let len: number = words.length;
-		result = "";
-		for (let word of words) {
-			let rand: number = Math.floor(Math.random() * len/2);
-			if (rand === 0) {
-				result += plomp;
-			} else {
-				result += word;
-			}
+	if (isPlomp) { result = plompify(result); }
 
-			result += " ";
+	message.channel.send(result);
+}
+
+function randomSentimentTable(): string
+{
+	if (Math.random() > 0.5) { return messageTypeToTable[ThreePartMessageType.Compliment]; }
+	else { return messageTypeToTable[ThreePartMessageType.Insult]; }
+}
+
+function plompify(result: string): string {
+	const plomp = "Plomp";
+	const words = result.split(" ");
+	const len: number = words.length;
+	result = "";
+	for (let word of words) {
+		let rand: number = Math.floor(Math.random() * len / 2);
+		if (rand === 0) {
+			result += plomp;
+		} else {
+			result += word;
 		}
 
-		result = result.substring(0, result.length - 1);  //Truncate trailing space.
+		result += " ";
 	}
 
-	tryToPostInSameChannel(message, result, getUserName(message.member), "Can't spoof on this channel");
+	result = result.substring(0, result.length - 1); //Truncate trailing space.
+	return result;
 }

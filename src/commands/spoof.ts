@@ -2,6 +2,7 @@ import * as Discord from "discord.js";
 import { notifyAuthorOfFailure } from "../util";
 import { getUserName, UserManager } from "../knownUsers";
 import { tryToPostInSameChannel } from "../channels";
+import { isPersonSpoofable } from "../database";
 
 export default function process(message: Discord.Message): void {
     const pieces = message.content.split(/\s+/);
@@ -21,6 +22,14 @@ export default function process(message: Discord.Message): void {
     let userName: string, avatar: string;
     if (knownUserRecord) {
         userName = getUserName(knownUserRecord);
+
+        // tricky: use user.username to match, not their current nickname
+        if (!isPersonSpoofable(knownUserRecord.user.username))
+        {
+            message.author.send(`${userName} has requested not to be spoofed`);
+            return;
+        }
+
         avatar = knownUserRecord.user.avatarURL;
     } else {
         userName = userToSpoof;

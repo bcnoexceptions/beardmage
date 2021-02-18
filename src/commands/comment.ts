@@ -1,8 +1,8 @@
 import * as Discord from "discord.js";
-import { handleInsultOrCompliment } from "../insultOrCompliment";
+import { handleInsultOrCompliment, ThreePartMessageType } from "../insultOrCompliment";
 
 export default function process(message: Discord.Message): void {
-    handleInsultOrCompliment("comment", message);
+    handleInsultOrCompliment(ThreePartMessageType.Comment, message);
 }
 
 process.help = "say something about someone";

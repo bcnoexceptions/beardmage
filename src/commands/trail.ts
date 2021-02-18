@@ -36,12 +36,7 @@ export default function process(message: Discord.Message): void {
 
     result = getUserName(message.member) + result;
 
-    tryToPostInSameChannel(
-        message,
-        result,
-        "beardslave",
-        "Can't spoof on this channel"
-    );
+    message.channel.send(result);
 }
 
 process.help = "tell of your adventures on the Oregon Trail";

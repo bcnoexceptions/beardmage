@@ -119,3 +119,31 @@ export function unthemePerson(username: string): void {
 	const statement = db.prepare(`DELETE FROM themedPeople WHERE person = (?)`);
 	statement.run(username);
 }
+
+export function isPersonSpoofable(username: string): boolean {
+	const db = new sqlite(publicConfig.channelFile);
+	const statement = db.prepare(
+		`SELECT nospoof FROM userPreferences WHERE person = (?)`
+	);
+	const results = statement.all(username);
+	if (results.length < 1) { return true; }
+
+	return !results[0].nospoof;
+}
+
+export function disallowSpoof(username: string): void {
+	setSpoofDisallowedSetting(username, 1);
+}
+
+export function allowSpoof(username: string): void {
+	setSpoofDisallowedSetting(username, 0);
+}
+
+function setSpoofDisallowedSetting(username: string, nospoofVal: number): void {
+	const db = new sqlite(publicConfig.channelFile);
+	const statement = db.prepare(
+		`INSERT INTO userPreferences(person, nospoof) VALUES((?), 1) ON CONFLICT(person) DO UPDATE SET nospoof = ${nospoofVal}`
+	);
+
+	statement.run(username);
+}

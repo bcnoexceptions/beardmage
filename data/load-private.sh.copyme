@@ -2,7 +2,7 @@
 
 sqlite3 channels.sqlite 'DROP TABLE IF EXISTS channels;'
 
-sqlite3 channels.sqlite 'CREATE TABLE channels ( channel TEXT, role TEXT, webhookID TEXT, webhookToken TEXT );'
+sqlite3 channels.sqlite 'CREATE TABLE channels(channel TEXT, role TEXT, webhookID TEXT, webhookToken TEXT);'
 
 sqlite3 channels.sqlite "insert into channels values('general', '', '', '');"
 sqlite3 channels.sqlite "insert into channels values('nobs-chat', '', '', '');"
@@ -29,5 +29,8 @@ sqlite3 channels.sqlite "insert into channels values('bloodstained-spoilers', 'B
 sqlite3 channels.sqlite "insert into channels values('sekiro-spoilers', 'Sekiro', '', '');"
 
 sqlite3 channels.sqlite 'DROP TABLE IF EXISTS themedPeople;'
+sqlite3 channels.sqlite 'CREATE TABLE themedPeople(person TEXT);'
 
-sqlite3 channels.sqlite 'CREATE TABLE themedPeople ( person TEXT );'
+sqlite3 channels.sqlite 'DROP TABLE IF EXISTS userPreferences;'
+sqlite3 channels.sqlite 'CREATE TABLE userPreferences(person TEXT, nospoof INTEGER);'
+sqlite3 channels.sqlite 'CREATE UNIQUE INDEX userPreferences_IX ON userPreferences(person);'
