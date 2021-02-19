@@ -49,7 +49,7 @@ export function handleInsultOrCompliment(which: ThreePartMessageType, message: D
 
 	if (isPlomp) { result = plompify(result); }
 
-	message.channel.send(result);
+	message.channel.send(message.member + " says: " + result);
 }
 
 function randomSentimentTable(): string
