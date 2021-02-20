@@ -13,6 +13,6 @@ export default function process(message: Discord.Message): void {
         name,
         "Can't spoof on this channel"
     );
-}
+} 
 
 process.help = "Announce that chat has gotten heated, and there's a situation that needs to be resolved";
