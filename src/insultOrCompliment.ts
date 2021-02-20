@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import { getRandomDatabaseOption } from "./database";
-import { getUserName { from "./knownUsers";
+import { getUserName } from "./knownUsers";
 
 export enum ThreePartMessageType {
 	Compliment = 1,
