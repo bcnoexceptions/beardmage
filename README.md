@@ -10,6 +10,7 @@
 -   `npm i discord.js @types/node better-sqlite3 @types/better-sqlite3` (run in the beardslave directory, it needs package.json)
 -   Create webhook, retrieve it's ID and token
 -   Copy private-config.json.copyme to private-config.json, fill it in
+-   Copy welcome.txt.copyme to welcome.txt, fill it in.
 -   Fill in the friend codes spreadsheet link
 
 These next steps are for urMom.ts; if you remove that functionality, you don't need them. I don't know what the corresponding commands are on Windows.
