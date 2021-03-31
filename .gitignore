@@ -8,3 +8,4 @@ src/config/private-config.json.testbed
 src/config/google-key.json
 data/load-private.sh
 .vscode
+data/welcome.txt

@@ -1,5 +1,6 @@
 import * as Discord from "discord.js";
 import { getRandomDatabaseOption } from "./database";
+import { getUserName } from "./knownUsers";
 
 export enum ThreePartMessageType {
 	Compliment = 1,
@@ -48,8 +49,8 @@ export function handleInsultOrCompliment(which: ThreePartMessageType, message: D
 	}
 
 	if (isPlomp) { result = plompify(result); }
-
-	message.channel.send(message.member.nickname + " says: " + result);
+	
+	message.channel.send(getUserName(message.member) + " says: " + result);
 }
 
 function randomSentimentTable(): string

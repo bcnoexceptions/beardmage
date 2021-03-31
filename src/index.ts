@@ -4,6 +4,7 @@ import { UserManager } from "./knownUsers";
 import * as knownCommands from "./knownCommands";
 import { messageHandler, updateHandler } from "./messageHandler";
 import { syncServer } from "./serverSetup";
+import { sendWelcomeToUser } from "./sendWelcome";
 
 const client = new Discord.Client();
 
@@ -32,5 +33,10 @@ client.on(
         updateHandler(client, oldMessage, newMessage);
     }
 );
+
+client.on("guildMemberAdd", (member: Discord.GuildMember) => {
+    sendWelcomeToUser(member.user);
+
+});
 
 client.login(privateConfig.token);
