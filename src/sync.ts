@@ -5,11 +5,15 @@ import { getUserName } from "./knownUsers";
 import { sendMessageToChannel } from "./webhooks";
 
 export function syncToGeneral(message: Discord.Message) {
-	syncMessage(message, publicConfig.generalChannel);
+	if (publicConfig.sync) {
+		syncMessage(message, publicConfig.generalChannel);
+	}
 }
 
 export function syncToNoBSChannel(message: Discord.Message) {
-	syncMessage(message, publicConfig.syncChannel);
+	if (publicConfig.sync) {
+		syncMessage(message, publicConfig.syncChannel);
+	}
 }
 
 function syncMessage(message: Discord.Message, channel: string) {
