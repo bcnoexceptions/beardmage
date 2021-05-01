@@ -19,9 +19,9 @@ export default function process(message: Discord.Message): void {
 
 function getRandomShittyPause() {
 	const prompts = [
-		"Are you actively resisting the learning and anti-racist work we are learning right now?",
+		"Are you actively resisting the learning and anti-racist work we are learing about right now?",
 		"Are you intending to throw up a barrier because that's what it sounds like?",
-		"I'm trying to continue on my equity journey, what you are saying is not helping with that journey"
+		"I'm trying to continue on my equity journey, what you are saying is not helping with this journey"
 	];
 
 	const idx = getRandomInt(prompts.length)
