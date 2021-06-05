@@ -50,7 +50,7 @@ export function handleInsultOrCompliment(which: ThreePartMessageType, message: D
 
 	if (isPlomp) { result = plompify(result); }
 	
-	message.channel.send(getUserName(message.member) + " says: " + result);
+	message.channel.send(getUserName(message.member as Discord.GuildMember) + " says: " + result);
 }
 
 function randomSentimentTable(): string

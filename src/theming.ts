@@ -22,7 +22,11 @@ export function themeIfAppropriate(message: Discord.Message): void {
 		return; // don't try to theme these
 	}
 
-	const emojis = message.guild.emojis;
+	if (!message.guild || !message.member) {
+		return; //User left the server, or discord shat the bed
+	}
+
+	const emojis = message.guild.emojis.cache;
 
 	const newContent = replaceWithEmojis(message.content, emojis);
 	if (newContent !== message.content) {

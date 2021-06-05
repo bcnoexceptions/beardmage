@@ -35,7 +35,7 @@ export function tryToPostInSameChannel(
 	}
 
 	if (!avatarURL) {
-		avatarURL = message.author.avatarURL;
+		avatarURL = message.author.avatarURL() ?? undefined;
 	}
 	sendMessageToChannel(channel, text, userName, avatarURL);
 	return true;
@@ -54,23 +54,23 @@ export async function findOrCreateChannel(
 
 		const everyoneRole = await findRole(server, "@everyone");
 		if (everyoneRole) {
-			await channel.overwritePermissions(everyoneRole, {
+			await channel.createOverwrite(everyoneRole, {
 				SEND_MESSAGES: false,
 				EMBED_LINKS: false,
 				ADD_REACTIONS: false,
 				ATTACH_FILES: false,
 				READ_MESSAGE_HISTORY: false,
-				READ_MESSAGES: false,
+				VIEW_CHANNEL: false,
 			});
 		}
 
-		await channel.overwritePermissions(role, {
+		await channel.createOverwrite(role, {
 			SEND_MESSAGES: true,
 			EMBED_LINKS: true,
 			ADD_REACTIONS: true,
 			ATTACH_FILES: true,
 			READ_MESSAGE_HISTORY: true,
-			READ_MESSAGES: true,
+			VIEW_CHANNEL: true,
 		});
 
 		console.log("added role " + roleName + " to #" + channelName);
@@ -80,7 +80,7 @@ export async function findOrCreateChannel(
 }
 
 export function findChannel(server: Discord.Guild, channelName: string): Discord.TextChannel | null {
-	for (const channel of server.channels.array()) {
+	for (const channel of server.channels.cache.array()) {
 		if (channel.type !== "text") {
 			continue;
 		}
@@ -98,7 +98,7 @@ export async function createChannel(
 	channelName: string,
 	roleName: string
 ): Promise<Discord.TextChannel> {
-	const channel = (await server.createChannel(channelName, { type: "text" })) as Discord.TextChannel;
+	const channel = (await server.channels.create(channelName, { type: "text" })) as Discord.TextChannel;
 
 	console.log("created channel " + channelName);
 

@@ -7,7 +7,7 @@ export default function process(message: Discord.Message): void {
     const channel = message.channel as Discord.TextChannel;
     channel.setTopic(newSubject);
 
-    const name = getUserName(message.member);
+    const name = getUserName(message.member as Discord.GuildMember);
     channel.send(`${name} changed the subject to "${newSubject}"`);
 }
 

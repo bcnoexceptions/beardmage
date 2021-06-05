@@ -18,8 +18,8 @@ export class UserManager {
     }
 
     public async loadUsers(server: Discord.Guild) {
-        const fullGuild = await server.fetchMembers();
-        const users = fullGuild.members.array();
+        const fullGuild = await server.members.fetch();
+        const users = fullGuild.array();
         for (const user of users) {
             this.addUser(user);
         }
@@ -67,6 +67,7 @@ export class UserManager {
         }
     }
 }
+
 
 export function getUserName(user: Discord.GuildMember) {
     let name = user.nickname;

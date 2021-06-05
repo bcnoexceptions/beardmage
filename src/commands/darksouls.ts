@@ -29,7 +29,7 @@ Poison,Strong poison,Curses,Divine,Occult,Crystal,Chance,Hint,Secret,Happiness,S
 export default function process(message: Discord.Message): void {
     const result: string =
         "*" +
-        getUserName(message.member) +
+        getUserName(message.member as Discord.GuildMember) +
         " reads a message scrawled on the ground:* " +
         generateDarkSoulsSaying();
     

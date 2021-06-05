@@ -64,7 +64,7 @@ export async function handleRegex(message: Discord.Message) {
     const regex = new RegExp(pieces[0], pieces[2]);
     const newText = subTarget.content.replace(regex, pieces[1]);
 
-    if (
+    if (message.member && 
         tryToPostInSameChannel(
             message,
             newText,
@@ -95,7 +95,7 @@ function removeChannel(message: Discord.Message) {
 async function getMessageToRegex(
     regexMessage: Discord.Message
 ): Promise<Discord.Message | null> {
-    const last100MessagesColl = await regexMessage.channel.fetchMessages({
+    const last100MessagesColl = await regexMessage.channel.messages.fetch({
         limit: 100,
     });
 

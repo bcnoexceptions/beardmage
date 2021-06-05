@@ -4,7 +4,7 @@ import { getUserName } from "../knownUsers";
 
 export default function process(message: Discord.Message): void {
 
-	const name = getUserName(message.member);
+	const name = getUserName(message.member as Discord.GuildMember);
 	const text = `!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nHOLD IT!\n${name} requests a pause\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`;
 
     tryToPostInSameChannel(

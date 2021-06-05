@@ -3,7 +3,8 @@ import { getNonSpecialChannels, IChannelData } from "../channels";
 import { addMessageAuthorToChannel, userHasChannel } from "../userPermissions";
 
 export default async function process(message: Discord.Message): Promise<void> {
-	message.member.send(
+
+	message.member!.send(
 		"Beginning to add all channels. Note that this may take a while due to Discord rate limiting ..."
 	);
 
@@ -14,7 +15,7 @@ export default async function process(message: Discord.Message): Promise<void> {
 	const addChannelsFromList = async (toTry: IChannelData[], successes: IChannelData[], failures: IChannelData[]) => {
 		for (const channel of toTry) {
 			try {
-				if (!userHasChannel(message.member, channel.name)) {
+				if (!userHasChannel(message.member as Discord.GuildMember, channel.name)) {
 					await addMessageAuthorToChannel(message, channel.name);
 					successes.push(channel);
 				}

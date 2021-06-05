@@ -42,5 +42,7 @@ export function randChat(
 		result = result.toLowerCase();
 	}
 
-	tryToPostInSameChannel(message, result, getUserName(message.member), "Can't spoof on this channel");
+	if (message.member) {
+		tryToPostInSameChannel(message, result, getUserName(message.member), "Can't spoof on this channel");
+	}
 }

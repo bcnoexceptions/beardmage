@@ -11,7 +11,7 @@ export default function process(message: Discord.Message): void {
                 `Could not run !magic: ${errMessage.message}`
             );
         } else {
-            const prefix = `${getUserName(message.member)} casts a spell!\n`;
+            const prefix = `${getUserName(message.member as Discord.GuildMember)} casts a spell!\n`;
             message.channel.send(prefix + stdout);
         }
     });
