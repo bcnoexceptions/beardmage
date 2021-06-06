@@ -17,10 +17,10 @@ export function syncToNoBSChannel(message: Discord.Message) {
 }
 
 function syncMessage(message: Discord.Message, channel: string) {
-	if (!canPostToChannel(channel)) {
+	if (!canPostToChannel(channel) || !message.member) {
 		return;
 	}
 
-	const avatarURL = message.author.avatarURL;
-	sendMessageToChannel(channel, message.cleanContent, getUserName(message.member), avatarURL);
+	const avatarURL = message.author.avatarURL();
+	sendMessageToChannel(channel, message.cleanContent, getUserName(message.member), avatarURL ?? undefined);
 }

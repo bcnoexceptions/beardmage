@@ -10,7 +10,7 @@ export function sendMessageToChannel(
     channel: string,
     message: string,
     username: string,
-    userAvatar: string
+    userAvatar?: string
 ): boolean {
     const connInfo = getWebhookForChannel(channel);
     if (!connInfo) {
@@ -24,7 +24,7 @@ export function sendMessageToHook(
     connInfo: IWebhook,
     message: string,
     username: string,
-    userAvatar: string
+    userAvatar?: string
 ) {
     const webh = new Discord.WebhookClient(connInfo.ID, connInfo.token);
 
@@ -58,5 +58,5 @@ export async function createWebhookForChannel(
     channel: Discord.TextChannel
 ): Promise<Discord.Webhook> {
     console.log("creating new webhook for " + channel.name);
-    return channel.createWebhook("_", "");
+    return channel.createWebhook("_");
 }

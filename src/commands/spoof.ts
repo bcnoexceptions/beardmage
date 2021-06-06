@@ -19,7 +19,7 @@ export default function process(message: Discord.Message): void {
 
     const knownUserRecord = UserManager.getInstance().lookupUser(userToSpoof);
 
-    let userName: string, avatar: string;
+    let userName: string, avatar: string | null;
     if (knownUserRecord) {
         userName = getUserName(knownUserRecord);
 
@@ -30,7 +30,7 @@ export default function process(message: Discord.Message): void {
             return;
         }
 
-        avatar = knownUserRecord.user.avatarURL;
+        avatar = knownUserRecord.user.avatarURL();
     } else {
         userName = userToSpoof;
         avatar = "";
@@ -41,7 +41,7 @@ export default function process(message: Discord.Message): void {
         spoofText,
         userName,
         "Can't spoof on this channel",
-        avatar
+        avatar ?? undefined
     );
 }
 

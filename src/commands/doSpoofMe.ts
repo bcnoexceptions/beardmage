@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 import { allowSpoof } from "../database";
 
 export default function process(message: Discord.Message): void {
-	allowSpoof(message.member.user.username);
+	allowSpoof(message.member!.user.username);
     message.author.send("spoofing of you has been enabled");
 }
 

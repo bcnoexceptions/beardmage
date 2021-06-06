@@ -37,7 +37,7 @@ export default function process(message: Discord.Message): void {
     tryToPostInSameChannel(
         message,
         result,
-        getUserName(message.member),
+        getUserName(message.member as Discord.GuildMember),
         "Can't spoof on this channel"
     );
 }

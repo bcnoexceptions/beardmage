@@ -39,7 +39,7 @@ export default function process(message: Discord.Message): void {
     }
 
     const resultMessage: string = constructChannelMessage(rollRequest, dieRollStr, sum);
-    tryToPostInSameChannel(message,resultMessage,getUserName(message.member),null);
+    tryToPostInSameChannel(message,resultMessage,getUserName(message.member as Discord.GuildMember),null);
 }
 
 function constructChannelMessage(rollRequest: DieRollRequest, dieRollStr: string, sum:number): string {

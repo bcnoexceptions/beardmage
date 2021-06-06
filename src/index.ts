@@ -9,17 +9,20 @@ import { sendWelcomeToUser } from "./sendWelcome";
 const client = new Discord.Client();
 
 client.on("ready", async () => {
-    const xcool = client.guilds.array()[0];
+    const xcool = client.guilds.cache.array()[0];
 
     await UserManager.getInstance().loadUsers(xcool);
     knownCommands.loadCommands();
     syncServer(xcool);
 });
 
+//We don't have partials enabled so we should never get them, but still need to handle the types
+//https://discordjs.guide/popular-topics/partials.html#enabling-partials
+//¯\_(ツ)_/¯
 client.on(
     "guildMemberUpdate",
-    (oldMember: Discord.GuildMember, newMember: Discord.GuildMember) => {
-        UserManager.getInstance().renameUser(oldMember, newMember);
+    (oldMember: Discord.GuildMember | Discord.PartialGuildMember, newMember: Discord.GuildMember) => {
+        UserManager.getInstance().renameUser(oldMember as Discord.GuildMember, newMember);
     }
 );
 
@@ -29,8 +32,8 @@ client.on("message", async (message: Discord.Message) => {
 
 client.on(
     "messageUpdate",
-    async (oldMessage: Discord.Message, newMessage: Discord.Message) => {
-        updateHandler(client, oldMessage, newMessage);
+    async (oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage) => {
+        updateHandler(client, oldMessage as Discord.Message, newMessage as Discord.Message);
     }
 );
 

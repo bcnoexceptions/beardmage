@@ -9,13 +9,16 @@ export async function addMessageAuthorToChannel(
 	notifySender?: boolean
 ): Promise<void> {
 	const roleName = getRoleNameForChannel(channelName);
-	const role = findRole(message.guild, roleName);
+	const role = findRole(message.guild as Discord.Guild, roleName);
 	if (!role) {
 		notifyAuthorOfFailure(message, `Could not find role for channel ${channelName}`);
 		return;
 	}
+	if (!message.member) {
+		return;
+	}
 
-	await message.member.addRole(role);
+	await message.member.roles.add(role);
 	if (notifySender) {
 		await message.author.send(`Added channel ${channelName}`);
 	}
@@ -27,13 +30,16 @@ export async function removeMessageAuthorFromChannel(
 	notifySender?: boolean
 ): Promise<void> {
 	const roleName = getRoleNameForChannel(channelName);
-	const role = findRole(message.guild, roleName);
+	const role = findRole(message.guild as Discord.Guild, roleName);
 	if (!role) {
 		notifyAuthorOfFailure(message, `Could not find role for channel ${channelName}`);
 		return;
 	}
+	if (!message.member) {
+		return;
+	}
 
-	await message.member.removeRole(role);
+	await message.member.roles.remove(role);
 	if (notifySender) {
 		await message.author.send(`Removed channel ${channelName}`);
 	}
@@ -55,7 +61,7 @@ function getRoleNameForChannel(channelName: string): string | null {
 export function userHasChannel(user: Discord.GuildMember, channelName: string): boolean {
 	const roleName = getRoleNameForChannel(channelName);
 
-	if (user.roles.find(role => role.name === roleName)) {
+	if (user.roles.cache.find(role => role.name === roleName)) {
 		return true;
 	}
 	return false;

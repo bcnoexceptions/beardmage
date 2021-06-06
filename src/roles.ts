@@ -12,7 +12,7 @@ export async function findOrCreateRole(server: Discord.Guild, name: string): Pro
 }
 
 export function findRole(server: Discord.Guild, name: string | null): Discord.Role | null {
-	for (const role of server.roles.array()) {
+	for (const role of server.roles.cache.array()) {
 		if (role.name === name) {
 			return role;
 		}
@@ -23,10 +23,14 @@ export function findRole(server: Discord.Guild, name: string | null): Discord.Ro
 
 export async function createRole(server: Discord.Guild, name: string): Promise<Discord.Role> {
 	console.log("creating role " + name);
-	const role = await server.createRole({ name, permissions: NewRolePermissions });
+	const roleData: Discord.RoleData = {
+		name: name,
+		permissions: NewRolePermissions
+	}
+	const role = await server.roles.create({data: roleData});
 
 	// assign it to all users on the server
-	let allMembers = server.members.array();
+	let allMembers = server.members.cache.array();
 	const failures: Discord.GuildMember[] = [];
 
 	const addRoleToMembers = async (toAddTo: Discord.GuildMember[], failures: Discord.GuildMember[]) => {
@@ -35,7 +39,7 @@ export async function createRole(server: Discord.Guild, name: string): Promise<D
 				continue;
 			}
 			try {
-				await member.addRole(role);
+				await member.roles.add(role);
 			} catch {
 				failures.push(member);
 			}

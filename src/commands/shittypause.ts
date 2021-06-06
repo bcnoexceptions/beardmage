@@ -5,7 +5,7 @@ import { getUserName } from "../knownUsers";
 
 
 export default function process(message: Discord.Message): void {
-	const userName = getUserName(message.member);
+	const userName = getUserName(message.member as Discord.GuildMember);
 	const text = `!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nHOLD IT!\n${userName} would like to say: ${getRandomShittyPause()} \n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`;
 
 	tryToPostInSameChannel(message,

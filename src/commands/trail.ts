@@ -4,6 +4,11 @@ import { getUserName } from "../knownUsers";
 
 export default function process(message: Discord.Message): void {
     let result: string;
+
+    if (!message.member) {
+        return;
+    }
+
     let rNum = Math.floor(Math.random() * 6) + 1;
     switch (rNum) {
         case 1:
