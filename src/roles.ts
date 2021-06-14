@@ -71,6 +71,10 @@ export async function removeRoleFromMembers(roleToRemove: Discord.Role, toRemove
 	}
 }
 
+export function getUsersWithRole(server: Discord.Guild, role: Discord.Role): Discord.GuildMember[] {
+	return role.members.array();
+}
+
 async function assignRoleToAllHumans(server:Discord.Guild, newRole: Discord.Role): Promise<void> {
 	// assign it to all non-bots on the server
 	const allMembers = server.members.cache.array();

@@ -1,5 +1,7 @@
 import * as Discord from "discord.js";
-import { addRoleToMembers, createRole, findRole, getAllRoles, removeRoleFromMembers, tryDeleteRole } from "../roles";
+import { moveMessagePortToContext } from "worker_threads";
+import { getUserName } from "../knownUsers";
+import { addRoleToMembers, createRole, findRole, getAllRoles, getUsersWithRole, removeRoleFromMembers, tryDeleteRole } from "../roles";
 import { notifyAuthorOfFailure } from "../util";
 
 export default async function process(message: Discord.Message): Promise<void> {
@@ -30,6 +32,9 @@ export default async function process(message: Discord.Message): Promise<void> {
 			break;
 		case "DELETE":
 			await deleteGroup(message,roleName);
+			break;
+		case "MEMBERS":
+			listMembership(message,roleName);
 			break;
 		case "LIST": 
 			listGroups(message);
@@ -101,8 +106,8 @@ async function leaveGroup(message: Discord.Message, roleNameToLeave: string) {
 }
 
 async function deleteGroup(message: Discord.Message, roleNameToDelete: string) {
-	const guild = message.guild as Discord.Guild
-	const success: boolean = await tryDeleteRole(guild, roleNameToDelete);
+	const server = message.guild as Discord.Guild
+	const success: boolean = await tryDeleteRole(server, roleNameToDelete);
 
 	if (success) {
 		message.channel.send(`Successfully deleted ${roleNameToDelete}`);
@@ -112,14 +117,39 @@ async function deleteGroup(message: Discord.Message, roleNameToDelete: string) {
 	}
 }
 
+function listMembership(message: Discord.Message, roleName: string) {
+	const server = message.guild as Discord.Guild;
+
+	const role = findRole(server, roleName);
+
+	console.log(JSON.stringify(role));
+
+	if (!role) {
+		notifyAuthorOfFailure(message, `${roleName} is not a valid group`);
+		return;
+	}
+
+	const users = getUsersWithRole(server, role);
+	if (users.length === 0) {
+		message.author.send(`${roleName} has no members`);
+		return;
+	}
+
+	let toSend = `${roleName} has the following members:`;
+	for(const user of users) {
+		toSend += `\n${getUserName(user)}`;
+	}
+	message.author.send(toSend);
+}
+
 function listGroups(message: Discord.Message) {
 	const roles: Discord.Role[] = getAllRoles(message.guild as Discord.Guild);
 	const groupRoles: Discord.Role[] = roles.filter((role: Discord.Role) => role.name.startsWith('g-'));
 
-	let listToSend: string = `The following groups are available: `
+	let listToSend: string = `The following groups are available: `;
 
 	for(const role of groupRoles) {
-		listToSend += `\n${role.name}`
+		listToSend += `\n${role.name}`;
 	}
 
 	message.author.send(listToSend);
@@ -138,7 +168,7 @@ function expandedHelp(message: Discord.Message) {
 	!groups delete <groupname> - Delete the group 
 	!groups list - Get a PM with all available groups
 	!groups help - See this again
-	\``
+	\``;
 	message.author.send(helpMessage);
 }
 
@@ -149,7 +179,7 @@ function makeRoleName(roleNameArray: string[]) {
 	const roleName = roleNameArray.join('-');
 
 	if (roleName.startsWith("g-")) return roleName;
-	return "g-"+roleName
+	return "g-"+roleName;
 } 
 
 // uncomment to support !help

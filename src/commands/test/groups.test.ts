@@ -198,7 +198,7 @@ describe('Groups', function() {
         const fakeRoles: Discord.Role[] = [];
         fakeRoles.push(buildFakeRole("NonGroupRoleOne"));
         fakeRoles.push(buildFakeRole("g-jizz"));
-        fakeRoles.push(buildFakeRole("NonGroupRoleTwo"))
+        fakeRoles.push(buildFakeRole("NonGroupRoleTwo"));
         fakeRoles.push(buildFakeRole("g-jazz"));
         stubs.getAllRoles.returns(fakeRoles)
 
@@ -212,6 +212,48 @@ describe('Groups', function() {
         assert.ok(!sentMessage.includes("NonGroupRoleTwo"));
 
     });
+  });
+
+  describe('members', function() {
+    it('Lists out users in a group', async function() {
+        fakeMessage.content = `!groups members ${fakeGroupName}`;
+        stubs.findRole.returns(fakeRole);
+        const users: Discord.GuildMember[] = [];
+
+        users.push({nickname: 'BC'} as Discord.GuildMember);
+        users.push({nickname: 'MrSticky'} as Discord.GuildMember);
+
+        stubs.getUsersWithRole.returns(users);
+
+        await process(fakeMessage);
+
+        const sentToChannel: string = stubs.sendToAuthor.firstCall.args[0];
+        assert.ok(sentToChannel.includes('BC'));
+        assert.ok(sentToChannel.includes('MrSticky'));
+
+    });
+    it('Sends a different message when there are no users', async function() {
+        fakeMessage.content = `!groups members ${fakeGroupName}`;
+        stubs.findRole.returns(fakeRole);
+        stubs.getUsersWithRole.returns([]);
+
+        await process(fakeMessage);
+
+        const sentToChannel: string = stubs.sendToAuthor.firstCall.args[0];
+        assert.ok(sentToChannel.includes(`${fakeGroupName} has no members`));
+    });
+    it('Errors if the provided role doesn\'t exist', async function() {
+        fakeMessage.content = `!groups members ${fakeGroupName}`;
+        stubs.findRole.returns(null);
+        
+
+        await process(fakeMessage);
+
+        sinon.assert.calledOnce(stubs.notifyAuthorOfFailure);
+        sinon.assert.notCalled(stubs.sendToAuthor);
+        sinon.assert.notCalled(stubs.getUsersWithRole) 
+    });
+
   });
 });
 
@@ -227,6 +269,7 @@ function getStubs(): definedStubs {
         removeRoleFromMembers: sinon.stub(roles,"removeRoleFromMembers"),
         tryDeleteRole: sinon.stub(roles, "tryDeleteRole"),
         getAllRoles: sinon.stub(roles,"getAllRoles"),
+        getUsersWithRole: sinon.stub(roles,'getUsersWithRole'),
         notifyAuthorOfFailure: sinon.stub(util,"notifyAuthorOfFailure"),
 
         //Need to sub out these methods yourself
@@ -242,6 +285,7 @@ type definedStubs = {
     removeRoleFromMembers: sinon.SinonStub,
     tryDeleteRole: sinon.SinonStub,
     getAllRoles: sinon.SinonStub,
+    getUsersWithRole: sinon.SinonStub,
     notifyAuthorOfFailure: sinon.SinonStub,
 
     sendToChannel: sinon.SinonStub,
