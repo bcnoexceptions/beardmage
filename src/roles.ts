@@ -15,7 +15,7 @@ export async function findOrCreateRole(server: Discord.Guild, name: string): Pro
 
 export function findRole(server: Discord.Guild, name: string | null): Discord.Role | null {
 	for (const role of server.roles.cache.array()) {
-		if (role.name === name) {
+		if (role.name.toUpperCase() === name?.toUpperCase()) {
 			return role;
 		}
 	}
