@@ -18,7 +18,6 @@ export default async function process(message: Discord.Message): Promise<void> {
 		action = "HELP";
 	}
 
-
 	switch (action) {
 		case "CREATE":
 			await createGroup(message,roleName);
@@ -44,8 +43,18 @@ export default async function process(message: Discord.Message): Promise<void> {
 }
 
 async function createGroup(message: Discord.Message, newRoleName: string) {
-	const existingRole = findRole(message.guild as Discord.Guild, newRoleName)
-	if (existingRole) {
+	const existingRoles = getAllRoles(message.guild as Discord.Guild);
+
+	let roleAlreadyExists = false;
+	console.log(newRoleName);
+	for(const role of existingRoles) {
+		console.log(role.name)
+		if (role.name.toUpperCase() === newRoleName.toUpperCase()) {
+			roleAlreadyExists = true;
+		}
+	}
+
+	if (roleAlreadyExists) {
 		notifyAuthorOfFailure(message,`Role ${newRoleName} already exists`)
 		return;
 	}

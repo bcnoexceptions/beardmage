@@ -42,9 +42,19 @@ describe('Groups', function() {
     })
 
   describe('create', function() {
+
+
+
+    let existingGroups: Discord.Role[];
+    this.beforeEach(() => {
+        existingGroups = []; 
+        existingGroups.push(buildFakeRole('g-groupOne'));
+        existingGroups.push(buildFakeRole('g-groupTwo'));
+    })
+
     it('Creates a new group', async function() {
         fakeMessage.content = `!groups create ${fakeGroupName}`
-        stubs.findRole.returns(null)
+        stubs.getAllRoles.returns(existingGroups)
 
         await process(fakeMessage)
 
@@ -56,7 +66,8 @@ describe('Groups', function() {
 
     it('Errors if group already exists', async function() {
         fakeMessage.content = `!groups create ${fakeGroupName}`;
-        stubs.findRole.returns(fakeRole);
+        existingGroups.push(buildFakeRole(`g-${fakeGroupName.replace(/ /g,'-')}`));
+        stubs.getAllRoles.returns(existingGroups)
 
         await process(fakeMessage);
 
