@@ -10,7 +10,7 @@ import process from "../groups"
 //Does all this stuff really *need* all this testing? 
 //Not *really*, but MrSticky wanted to play with TDD
 describe('Groups', function() {
-    const fakeGroupName = "ooga booga booga"
+    const fakeGroupName = "oogaboogabooga"
     const fakeRole = { name: `g-${fakeGroupName}`}
 
     //We make heavy use of sinon stubs here and ignore all the business logic in roles
@@ -43,30 +43,45 @@ describe('Groups', function() {
 
   describe('create', function() {
 
-
-
     let existingGroups: Discord.Role[];
     this.beforeEach(() => {
         existingGroups = []; 
         existingGroups.push(buildFakeRole('g-groupOne'));
         existingGroups.push(buildFakeRole('g-groupTwo'));
+        
     })
 
-    it('Creates a new group', async function() {
-        fakeMessage.content = `!groups create ${fakeGroupName}`
+    it('Creates a new group replacing spaces with dashes', async function() {
+        fakeMessage.content = `!groups create ooga booga booga`
         stubs.getAllRoles.returns(existingGroups)
+        stubs.createRole.returns(buildFakeRole(`g-${fakeGroupName}`));
 
         await process(fakeMessage)
 
         sinon.assert.notCalled(stubs.notifyAuthorOfFailure)
         sinon.assert.calledOnce(stubs.createRole);
-        assert.strictEqual(stubs.createRole.getCall(0).args[1],`g-${fakeGroupName.replace(/ /g,'-')}`);
+        assert.strictEqual(stubs.createRole.getCall(0).args[1],`g-ooga-booga-booga`);
         sinon.assert.calledOnce(stubs.sendToChannel)
     });
 
+    it('Adds you to the new group you created', async function() {
+        fakeMessage.content = `!groups create ${fakeGroupName}`;
+        stubs.getAllRoles.returns(existingGroups)
+        stubs.createRole.returns(buildFakeRole(`g-${fakeGroupName}`));
+
+        await process(fakeMessage);
+
+        const addedRole: Discord.Role = stubs.addRoleToMembers.firstCall.args[0];
+        const addedMembers: Discord.GuildMember[] = stubs.addRoleToMembers.firstCall.args[1];
+
+        assert.strictEqual(addedRole.name, `g-${fakeGroupName}`)
+        assert.strictEqual(addedMembers[0].id, 12345)
+
+    })
+
     it('Errors if group already exists', async function() {
         fakeMessage.content = `!groups create ${fakeGroupName}`;
-        existingGroups.push(buildFakeRole(`g-${fakeGroupName.replace(/ /g,'-')}`));
+        existingGroups.push(buildFakeRole(`g-${fakeGroupName}`));
         stubs.getAllRoles.returns(existingGroups)
 
         await process(fakeMessage);

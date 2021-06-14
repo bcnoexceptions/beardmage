@@ -46,9 +46,7 @@ async function createGroup(message: Discord.Message, newRoleName: string) {
 	const existingRoles = getAllRoles(message.guild as Discord.Guild);
 
 	let roleAlreadyExists = false;
-	console.log(newRoleName);
 	for(const role of existingRoles) {
-		console.log(role.name)
 		if (role.name.toUpperCase() === newRoleName.toUpperCase()) {
 			roleAlreadyExists = true;
 		}
@@ -60,8 +58,11 @@ async function createGroup(message: Discord.Message, newRoleName: string) {
 	}
 
 	const newRole = await createRole(message.guild as Discord.Guild, newRoleName, true)
+	
+	const failures: Discord.GuildMember[] = []
+	addRoleToMembers(newRole, [message.member as Discord.GuildMember], failures);
 
-	message.channel.send(`New group ${newRoleName} created successfully`);
+	message.channel.send(`New group ${newRole.name} created successfully`);
 }
 async function joinGroup(message: Discord.Message, roleNameToJoin: string) {
 	const role = findRole(message.guild as Discord.Guild, roleNameToJoin)
