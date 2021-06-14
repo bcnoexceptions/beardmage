@@ -26,11 +26,12 @@ export function getAllRoles(server: Discord.Guild): Discord.Role[] {
 	return server.roles.cache.array();
 }
 
-export async function createRole(server: Discord.Guild, name: string): Promise<Discord.Role> {
+export async function createRole(server: Discord.Guild, name: string, mentionable?: boolean): Promise<Discord.Role> {
 	console.log("creating role " + name);
 	const roleData: Discord.RoleData = {
 		name: name,
-		permissions: NewRolePermissions
+		permissions: NewRolePermissions,
+		mentionable: mentionable
 	}
 	const role = await server.roles.create({data: roleData});
 	return role;

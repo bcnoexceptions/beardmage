@@ -50,7 +50,7 @@ async function createGroup(message: Discord.Message, newRoleName: string) {
 		return;
 	}
 
-	const newRole = await createRole(message.guild as Discord.Guild, newRoleName)
+	const newRole = await createRole(message.guild as Discord.Guild, newRoleName, true)
 
 	message.channel.send(`New group ${newRoleName} created successfully`);
 }
