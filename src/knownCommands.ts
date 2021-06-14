@@ -18,10 +18,12 @@ let commandMap: IStringMap<ICommandHandler> = {};
 export async function loadCommands() {
     commandMap = {};
 
-    const files = fs.readdirSync("src/commands");
+    const files = fs.readdirSync("src/commands", { withFileTypes: true});
 
     for (const file of files) {
-        const path = `./commands/${file}`;
+        if (file.isDirectory()) continue;
+
+        const path = `./commands/${file.name}`;
         let commandMod: ICommandFile;
         try {
             delete require.cache[require.resolve(path)];
@@ -30,7 +32,7 @@ export async function loadCommands() {
             console.log("Error during invalidation: " + e);
             continue;
         }
-        const name = file.replace(".ts", "");
+        const name = file.name.replace(".ts", "");
 
         const handler = commandMod.default;
         handler.commandName = name;
