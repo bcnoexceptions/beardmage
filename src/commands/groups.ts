@@ -166,6 +166,7 @@ function expandedHelp(message: Discord.Message) {
 	!groups join <groupname> - Join the group
 	!groups leave <groupname> - Leave the group
 	!groups delete <groupname> - Delete the group 
+	!groups members <groupname> - See who is in a group
 	!groups list - Get a PM with all available groups
 	!groups help - See this again
 	\``;
