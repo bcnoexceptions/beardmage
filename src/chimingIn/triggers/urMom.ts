@@ -46,7 +46,7 @@ export class UrMom implements IBotTrigger {
 	}
 }
 
-async function getMomString(text: string): Promise<string> {
+export async function getMomString(text: string): Promise<string> {
 	process.env["GOOGLE_APPLICATION_CREDENTIALS"] =
 		"src/config/google-key.json";
 	const client = new google.LanguageServiceClient();
