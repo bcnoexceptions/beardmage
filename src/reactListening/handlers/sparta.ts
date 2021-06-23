@@ -27,6 +27,6 @@ export class ReactSparta implements IReactTrigger {
     }
 
     public react(reaction: Discord.MessageReaction, user: Discord.PartialUser | Discord.User): void {
-        reaction.message.channel.send("https://thumbs.gfycat.com/SinfulDeliciousGraywolf-max-1mb.gif");
+        reaction.message.channel.send("https://tenor.com/view/sparta-kick-get-lost-gif-14684072");
     }
 }
