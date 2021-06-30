@@ -35,7 +35,7 @@ export class ReactSparta implements IReactTrigger {
         const message = reaction.message;
 
         // use lineReply from discord-reply
-        (message as any).lineReply("https://tenor.com/view/sparta-kick-get-lost-gif-14684072");
+        (message as any).lineReplyNoMention("https://tenor.com/view/sparta-kick-get-lost-gif-14684072");
 
         this.repliedToIDs.push(message.id);
     }
