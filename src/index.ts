@@ -7,6 +7,7 @@ import { syncServer } from "./serverSetup";
 import { sendWelcomeToUser } from "./sendWelcome";
 import { ReactHandler } from "./reactListening/mainListener";
 
+require("discord-reply");  // add reply functionality, at least until it's in the core API
 const client = new Discord.Client();
 
 client.on("ready", async () => {
