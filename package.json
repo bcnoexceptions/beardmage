@@ -1,7 +1,7 @@
 {
 	"name": "beardslave",
 	"version": "1.0.0",
-	"description": "beardslave",
+	"description": "beardmage",
 	"dependencies": {
 		"@google-cloud/language": "^4.2.4",
 		"@types/better-sqlite3": "^5.4.1",
