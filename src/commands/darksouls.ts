@@ -60,7 +60,7 @@ export function generateDarkSoulsSaying(): string {
 				conj = "";
 			} else {
 				const firstChar = conj.charAt(1);  //First char is actually a space, so get the 2nd character for the "first character"
-				conj = ' ' + firstChar.toUpperCase() + conj.substring(2, conj.length - 1);
+				conj = ' ' + firstChar.toUpperCase() + conj.substring(2, conj.length);
 			}
 		}
 		return firstPhrase + conj + " " + generatePhrase(getDS2Bases(), getDS2Fills(), true);
