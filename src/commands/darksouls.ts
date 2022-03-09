@@ -63,7 +63,7 @@ export function generateDarkSoulsSaying(): string {
 				conj = ' ' + firstChar.toUpperCase() + conj.substring(2, conj.length - 1);
 			}
 		}
-		return firstPhrase + conj + generatePhrase(getDS2Bases(), getDS2Fills(), true);
+		return firstPhrase + conj + " " + generatePhrase(getDS2Bases(), getDS2Fills(), true);
 	}
 	
 	return "RRRRIP fucked up somewhere";  //Should never hit this since there's an if-else, both with returns
@@ -86,6 +86,10 @@ export function generatePhrase(bases: string[], fills: string[], lowercase: Bool
 		phrase = base.replace("****", fill);
 	} else {
 		phrase = base;
+	}
+	
+	if (lowercase) {
+		phrase = phrase.toLowerCase();
 	}
 	
 	return phrase;
