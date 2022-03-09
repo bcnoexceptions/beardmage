@@ -70,7 +70,7 @@ export function generateDarkSoulsSaying(): string {
 }
 
 export function generatePhrase(bases: string[], fills: string[], lowercase: Boolean = false): string {
-	let base = bases[Math.floor(Math.random() * base.length)];
+	let base: string = bases[Math.floor(Math.random() * bases.length)];
 	let fill: string;
 	let phrase: string;
 	
