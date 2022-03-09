@@ -70,7 +70,7 @@ export function generateDarkSoulsSaying(): string {
 }
 
 export function generatePhrase(bases: string[], fills: string[], lowercase: Boolean = false): string {
-	lst base = bases[Math.floor(Math.random() * base.length)];
+	let base = bases[Math.floor(Math.random() * base.length)];
 	let fill: string;
 	let phrase: string;
 	
@@ -594,6 +594,7 @@ export function getDS2Fills(): string[] {
 		"It'll happen to you too",
 		"Praise the Sun!",
 		"May the flames guide thee"
+	];
 }
 
 export function getDS1Bases(): string[] {
