@@ -37,31 +37,62 @@ export default function process(message: Discord.Message): void {
 }
 
 export function generateDarkSoulsSaying(): string {
-    const baseSayings: string[] = getBases();
-    const fillSayings: string[] = getFills();
-
-    let saying: string = "";
-
-    let base: string =
-        baseSayings[Math.floor(Math.random() * baseSayings.length)];
-
-    if (base.indexOf("****") !== -1) {
-        let fill: string =
-            fillSayings[Math.floor(Math.random() * fillSayings.length)];
-        if (base.indexOf(":") === -1 && base.indexOf("****") !== 0) {
-            //No colon and fill is not the start
-            fill = fill.toLowerCase();
-        }
-        saying = base.replace("****", fill);
-    } else {
-        saying = base;
-    }
-
-    //Send the saying
-    return saying;
+    const mode = Math.floor(Math.random() * 2) + 1;
+	
+	let baseSayings: string[];
+	let fillSayings: string[];
+	
+	if (mode === 1)
+	{
+		return generatePhrase(getDS1Bases(), getDS1Fills());
+	}
+	else
+	{
+		const firstPhrase = generatePhrase(getDS2Bases(), getDS2Fills());
+		if (Math.floor(Math.random() * 2) === 0) {
+			return firstPhrase;
+		}
+		const conjunctions = getConjunctions();
+		let conj = conjunctions[Math.floor(Math.random() * conjunctions.length)];
+		const lastChar = firstPhrase.charAt(firstPhrase.length - 1);
+		if (lastChar === '!' || lastChar === '?') {
+			if (conj === ",") {
+				conj = "";
+			} else {
+				const firstChar = conj.charAt(1);  //First char is actually a space, so get the 2nd character for the "first character"
+				conj = ' ' + firstChar.toUpperCase() + conj.substring(2, conj.length - 1);
+			}
+		}
+		return firstPhrase + conj + generatePhrase(getDS2Bases(), getDS2Fills(), true);
+	}
+	
+	return "RRRRIP fucked up somewhere";  //Should never hit this since there's an if-else, both with returns
 }
 
-export function getFills(): string[] {
+export function generatePhrase(bases: string[], fills: string[], lowercase: Boolean = false): string {
+	lst base = bases[Math.floor(Math.random() * base.length)];
+	let fill: string;
+	let phrase: string;
+	
+	if (base.indexOf("****") !== -1) {
+		fill = fills[Math.floor(Math.random() * fills.length)];
+		const lastChar = fill.charAt(fill.length - 1);
+		if (lastChar === '!' || lastChar === '?') {
+			base = "****";
+		}
+		if (base.indexOf(":") === -1 && base.indexOf("****") !== 0) {
+			fill = fill.toLowerCase();
+		}
+		phrase = base.replace("****", fill);
+	} else {
+		phrase = base;
+	}
+	
+	return phrase;
+}
+	
+
+export function getDS1Fills(): string[] {
     return [
         "Enemy",
         "Tough enemy",
@@ -235,11 +266,351 @@ export function getFills(): string[] {
         "Bravery",
         "Resignation",
         "Comfort",
-        "Tears",
+        "Tears"
     ];
 }
 
-export function getBases(): string[] {
+export function getDS2Fills(): string[] {
+	return [
+		"Enemy",
+		"Monster",
+		"Mob enemy",
+        "Tough enemy",
+        "Critical foe",
+        "Hollow",
+        "Pilgrim",
+        "Prisoner",
+        "Monstrosity",
+        "Skeleton",
+        "Ghost",
+        "Beast",
+        "Lizard",
+        "Bug",
+        "Grub",
+        "Crab",
+        "Dwarf",
+        "Giant",
+        "Demon",
+        "Dragon",
+        "Knight",
+        "Sellsword",
+        "Warrior",
+        "Herald",
+        "Bandit",
+        "Assassin",
+        "Sorcerer",
+        "Pyromancer",
+        "Cleric",
+		"Deprived",
+		"Sniper",
+		"Duo",
+		"Trio",
+		"You",
+		"You bastard",
+		"Good fellow",
+		"Saint",
+		"Wretch",
+		"Charmer",
+		"Poor soul",
+		"Oddball",
+		"Nimble one",
+		"Laggard",
+		"Moneybags",
+		"Beggar",
+		"Miscreant",
+		"Liar",
+		"Fatty",
+		"Beanpole",
+		"Youth",
+		"Elder",
+		"Old codger",
+		"Old dear",
+		"Merchant",
+		"Artisan",
+		"Master",
+		"Sage",
+		"Champion",
+		"Lord of Cinder",
+		"King",
+		"Queen",
+		"Prince",
+		"Princess",
+		"Angel",
+		"God",
+		"Friend",
+		"Ally",
+		"Spouse",
+		"Covenantor",
+		"Phantom",
+		"Dark Spirit",
+		"Bonfire",
+		"Ember",
+		"Fog wall",
+		"Lever",
+		"Contraption",
+		"Key",
+		"Trap",
+		"Torch",
+		"Door",
+		"Treasure",
+		"Chest",
+		"Something",
+		"Quite something",
+		"Rubbish",
+		"Filth",
+		"Weapon",
+		"Shield",
+		"Projectile",
+		"Armor",
+		"Item",
+		"Ring",
+		"Ore",
+		"Coal",
+		"Transposing kiln",
+		"Scroll",
+		"Umbral ash",
+		"Throne",
+		"Rite",
+		"Coffin",
+		"Cinder",
+		"Ash",
+		"Moon",
+		"Eye",
+		"Brew",
+		"Soup",
+		"Message",
+		"Bloodstain",
+		"Illusion",
+		"Close-ranged battle",
+		"Ranged battle",
+		"Eliminating one at a Time",
+		"Luring it out",
+		"Beating to a pulp",
+		"Ambush",
+		"Pincer attack",
+		"Hitting them in one swoop",
+		"Duel-wielding",
+		"Stealth",
+		"Mimicry",
+		"Fleeing",
+		"Charging",
+		"Jumping off",
+		"Dashing through",
+		"Circling around",
+		"Trapping inside",
+		"Rescue",
+		"Skill",
+		"Sorcery",
+		"Pyromancy",
+		"Miracles",
+		"Pure luck",
+		"Prudence",
+		"Brief respite",
+		"Play dead",
+		"Jog",
+		"Dash",
+		"Rolling",
+		"Backstepping",
+		"Jumping",
+		"Attacking",
+		"Jump attack",
+		"Dash attack",
+		"Counter attack",
+		"Stabbing in the back",
+		"Guard stun & stab",
+		"Plunging attack",
+		"Shield breaking",
+		"Blocking",
+		"Parrying",
+		"Locking-on",
+		"No lock-on",
+		"Two-handing",
+		"Gesture",
+		"Control",
+		"Destroy",
+		"Boulder",
+		"Lava",
+		"Poison gas",
+		"Enemy horde",
+		"Forest",
+		"Swamp",
+		"Cave",
+		"Shortcut",
+		"Detour",
+		"Hidden path",
+		"Secret passage",
+		"Dead end",
+		"Labyrinth",
+		"Hole",
+		"Bright spot",
+		"Dark spot",
+		"Open area",
+		"Tight spot",
+		"Safe zone",
+		"Danger zone",
+		"Sniper spot",
+		"Hiding place",
+		"Illusory wall",
+		"Ladder",
+		"Lift",
+		"Gorgeous view",
+		"Looking away",
+		"Overconfidence",
+		"Slip-up",
+		"Oversight",
+		"Fatigue",
+		"Bad luck",
+		"Inattention",
+		"Loss of stamina",
+		"Chance encounter",
+		"Planned encounter",
+		"Front",
+		"Back",
+		"Left",
+		"Right",
+		"Up",
+		"Down",
+		"Below",
+		"Above",
+		"Behind",
+		"Head",
+		"Neck",
+		"Stomach",
+		"Back",
+		"Armor",
+		"Finger",
+		"Leg",
+		"Rear",
+		"Tail",
+		"Wings",
+		"Anywhere",
+		"Tongue",
+		"Right arm",
+		"Left arm",
+		"Thumb",
+		"Indexfinger",
+		"Longfinger",
+		"Ringfinger",
+		"Smallfinger",
+		"Right leg",
+		"Left leg",
+		"Right side",
+		"Left side",
+		"Pincer",
+		"Wheel",
+		"Core",
+		"Mount",
+		"Regular",
+		"Strike",
+		"Thrust",
+		"Slash",
+		"Magic",
+		"Crystal",
+		"Fire",
+		"Chaos",
+		"Lightning",
+		"Blessing",
+		"Dark",
+		"Critical hits",
+		"Bleeding",
+		"Poison",
+		"Toxic",
+		"Frost",
+		"Curse",
+		"Equipment breakage",
+		"Chance",
+		"Quagmire",
+		"Hint",
+		"Secret",
+		"Sleeptalk",
+		"Happiness",
+		"Misfortune",
+		"Life",
+		"Death",
+		"Demise",
+		"Joy",
+		"Fury",
+		"Agony",
+		"Sadness",
+		"Tears",
+		"Loyalty",
+		"Betrayal",
+		"Hope",
+		"Despair",
+		"Fear",
+		"Losing sanity",
+		"Victory",
+		"Defeat",
+		"Sacrifice",
+		"Light",
+		"Dark",
+		"Bravery",
+		"Confidence",
+		"Vigor",
+		"Revenge",
+		"Resignation",
+		"Overwhelming",
+		"Regret",
+		"Pointless",
+		"Man",
+		"Woman",
+		"Friendship",
+		"Love",
+		"Recklessness",
+		"Composure",
+		"Guts",
+		"Comfort",
+		"Silence",
+		"Deep",
+		"Dregs",
+		"Good luck",
+		"Fine work",
+		"I did it!",
+		"I've failed...",
+		"Here!",
+		"Not here!",
+		"I can't take this...",
+		"Lonely...",
+		"Don't you dare!",
+		"Do it!",
+		"Look carefully",
+		"Listen carefully",
+		"Think carefully",
+		"This place again?",
+		"Now the real fight begins",
+		"You don't deserve this",
+		"Keep moving",
+		"Pull back",
+		"Give it up",
+		"Don't give up",
+		"Help me...",
+		"Impossible...",
+		"Bloody expensive...",
+		"Let me out of here...",
+		"Stay calm",
+		"Like a dream...",
+		"Seems familiar...",
+		"Are you ready?",
+		"It'll happen to you too",
+		"Praise the Sun!",
+		"May the flames guide thee"
+}
+
+export function getDS1Bases(): string[] {
+	 return [
+        "**** ahead",
+        "Be wary of ****",
+        "Try ****",
+        "Need ****",
+        "Imminent ****",
+        "Weakness: ****",
+        "****",
+        "****?",
+        "Praise the Sun!"
+	]
+}
+
+export function getDS2Bases(): string[] {
     return [
         "**** ahead",
         "Be wary of ****",
@@ -250,7 +621,35 @@ export function getBases(): string[] {
         "****",
         "****?",
         "Praise the Sun!",
+		"**** required ahead",
+		"Visions of ****...",
+		"****!",
+		"****...",
+		"Hurrah for ****!",
+		"No **** ahead",
+		"Could this be a ****?",
+		"If only I had a ****....",
+		"Time for ****",
+		"Huh, it's a ****....",
+		"Praise the ****!",
+		"Let there be ****",
+		"Aah, ****...."
     ];
+}
+
+export function getConjunctions(): string [] {
+	return [
+		" and then",
+		" but",
+		" therefore",
+		" in short",
+		" or",
+		" only",
+		" by the way",
+		" so to speak",
+		" all the more",
+		","
+	];
 }
 
 // uncomment to support !help
