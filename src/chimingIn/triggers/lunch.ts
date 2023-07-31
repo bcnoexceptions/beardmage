@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
 import { IBotTrigger } from "../contextualResponses";
 
-export class ChatSlaveLunch implements IBotTrigger {
+export class ChatMageLunch implements IBotTrigger {
     private lastLunch: Date | null;
 
     public constructor() {

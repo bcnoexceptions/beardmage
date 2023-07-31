@@ -26,9 +26,9 @@ export function sendMessageToHook(
     username: string,
     userAvatar?: string
 ) {
-    const webh = new Discord.WebhookClient(connInfo.ID, connInfo.token);
+    const webh = new Discord.WebhookClient({ id: connInfo.ID, token: connInfo.token });
 
-    webh.send(message, { username: username, avatarURL: userAvatar });
+    webh.send({ username: username, avatarURL: userAvatar, content: message });
 }
 
 export async function findOrCreateWebhookForChannel(
@@ -46,7 +46,7 @@ export async function findAnyWebhooksOnChannel(
     channel: Discord.TextChannel
 ): Promise<Discord.Webhook | null> {
     const webhookColl = await channel.fetchWebhooks();
-    const webhooks = webhookColl.array();
+    const webhooks = [...webhookColl.values()];
 
     if (webhooks.length > 0) {
         return webhooks[0];
@@ -58,5 +58,5 @@ export async function createWebhookForChannel(
     channel: Discord.TextChannel
 ): Promise<Discord.Webhook> {
     console.log("creating new webhook for " + channel.name);
-    return channel.createWebhook("_");
+    return channel.createWebhook({ name: "BMhook" });
 }

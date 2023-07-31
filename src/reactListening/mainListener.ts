@@ -2,8 +2,8 @@ import * as Discord from "discord.js";
 import { ReactSparta } from './handlers/sparta';
 
 export interface IReactTrigger {
-	doesReactApply(reaction: Discord.MessageReaction): boolean;
-	react(message: Discord.MessageReaction, user: Discord.PartialUser | Discord.User): void;
+	doesReactApply(reaction: Discord.MessageReaction | Discord.PartialMessageReaction): boolean;
+	react(message: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.PartialUser | Discord.User): void;
 }
 
 export class ReactHandler
@@ -12,7 +12,7 @@ export class ReactHandler
 	private scenarios: IReactTrigger[];
 
 	private constructor() {
-		// ADD TO THIS ARRAY to add new features to chatslave auto responses
+		// ADD TO THIS ARRAY to add new features to ChatMage auto responses
 
 		this.scenarios = [
 			new ReactSparta(),
@@ -26,7 +26,7 @@ export class ReactHandler
 		return ReactHandler.instance;
 	}
 
-	public async processReact(reaction: Discord.MessageReaction, user: Discord.PartialUser | Discord.User): Promise<void> {
+	public async processReact(reaction: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.PartialUser | Discord.User): Promise<void> {
 		for (let handler of this.scenarios) {
 			if (handler.doesReactApply(reaction)) {
 				handler.react(reaction, user);

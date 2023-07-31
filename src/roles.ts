@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
 
 //const NewRolePermissions = 116800;  // send messages, embed links, attach files, read history, react
-const NewRolePermissions = 0;
+const NewRolePermissions: bigint[] = [];
 
 export async function findOrCreateRole(server: Discord.Guild, name: string): Promise<Discord.Role> {
 	const role = findRole(server, name);
@@ -14,7 +14,7 @@ export async function findOrCreateRole(server: Discord.Guild, name: string): Pro
 }
 
 export function findRole(server: Discord.Guild, name: string | null): Discord.Role | null {
-	for (const role of server.roles.cache.array()) {
+	for (const [_, role] of server.roles.cache) {
 		if (role.name.toUpperCase() === name?.toUpperCase()) {
 			return role;
 		}
@@ -23,7 +23,7 @@ export function findRole(server: Discord.Guild, name: string | null): Discord.Ro
 }
 
 export function getAllRoles(server: Discord.Guild): Discord.Role[] {
-	return server.roles.cache.array();
+	return [...server.roles.cache.values()];
 }
 
 export async function createRole(server: Discord.Guild, name: string, mentionable?: boolean): Promise<Discord.Role> {
@@ -33,7 +33,7 @@ export async function createRole(server: Discord.Guild, name: string, mentionabl
 		permissions: NewRolePermissions,
 		mentionable: mentionable
 	}
-	const role = await server.roles.create({data: roleData});
+	const role = await server.roles.create(roleData);
 	return role;
 }
 
@@ -41,7 +41,7 @@ export async function createRole(server: Discord.Guild, name: string, mentionabl
  * @returns true if role successfully deleted, false otherwise
  */
 export async function tryDeleteRole(server: Discord.Guild, name: string): Promise<boolean> {
-	for (const role of server.roles.cache.array()) {
+	for (const [_, role] of server.roles.cache) {
 		if (role.name === name) {
 			console.log("deleting role " + name);
 			await role.delete();
@@ -72,13 +72,13 @@ export async function removeRoleFromMembers(roleToRemove: Discord.Role, toRemove
 }
 
 export function getUsersWithRole(server: Discord.Guild, role: Discord.Role): Discord.GuildMember[] {
-	return role.members.array();
+	return [...role.members.values()];
 }
 
 async function assignRoleToAllHumans(server:Discord.Guild, newRole: Discord.Role): Promise<void> {
 	// assign it to all non-bots on the server
-	const allMembers = server.members.cache.array();
-	const humanMembers: Discord.GuildMember[] = allMembers.filter((member) => !member.user.bot)
+	const allMembers = server.members.cache;
+	const humanMembers: Discord.GuildMember[] = [...allMembers.filter((member) => !member.user.bot).values()];
 
 	const failures: Discord.GuildMember[] = [];
 	await addRoleToMembers(newRole, humanMembers, failures);

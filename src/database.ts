@@ -10,11 +10,16 @@ export function addDatabaseOption(table: string, value: string): void {
 	statement.run(value);
 }
 
+interface IValueRow
+{
+	value: string;
+}
+
 /** Always pass `table` in hard-coded from TS, to avoid injection! */
 export function getRandomDatabaseOption(table: string): string {
 	const db = new sqlite(publicConfig.listFile);
 	const statement = db.prepare(`SELECT value FROM ${table}`);
-	const rows = statement.all();
+	const rows = statement.all() as IValueRow[];
 	const num = rows.length;
 
 	if (num === 0) {
@@ -41,12 +46,20 @@ export function getWebhookForChannel(channelName: string): IWebhook | null {
 	return { ID: channelInfo.webhookID, token: channelInfo.webhookToken };
 }
 
+interface IChannelInfo
+{
+	name: string;
+	role: string;
+	webhookID: string;
+	webhookToken: string;
+}
+
 export function getChannelInfo(channelName: string): IChannelData | null {
 	const db = new sqlite(publicConfig.channelFile);
 	const statement = db.prepare(
 		`SELECT channel as name, role, webhookID, webhookToken FROM channels WHERE channel = (?)`
 	);
-	const rows = statement.all(channelName);
+	const rows = statement.all(channelName) as IChannelInfo[];
 	const num = rows.length;
 
 	if (num === 0) {
@@ -66,7 +79,7 @@ export function loadAllChannels(): IChannelData[] {
 	const statement = db.prepare(
 		`SELECT channel AS name, role, webhookID, webhookToken FROM channels`
 	);
-	const rows = statement.all();
+	const rows = statement.all() as IChannelInfo[];
 
 	const result: IChannelData[] = [];
 	for (const row of rows) {
@@ -93,12 +106,18 @@ export function updateChannelRowWithWebhook(
 	statement.run(webhookID, webhookToken, channelName);
 }
 
+interface INumberRow
+{
+	num: number;
+}
+
 export function isPersonThemed(username: string): boolean {
 	const db = new sqlite(publicConfig.channelFile);
 	const statement = db.prepare(
 		`SELECT count(*) as num FROM themedPeople where person = (?)`
 	);
-	const count = statement.get(username).num;
+	const sqlResults = statement.get(username) as INumberRow;
+	const count = sqlResults.num;
 	return count >= 1;
 }
 
@@ -120,12 +139,17 @@ export function unthemePerson(username: string): void {
 	statement.run(username);
 }
 
+interface INoSpoofRow
+{
+	nospoof: number;
+}
+
 export function isPersonSpoofable(username: string): boolean {
 	const db = new sqlite(publicConfig.channelFile);
 	const statement = db.prepare(
 		`SELECT nospoof FROM userPreferences WHERE person = (?)`
 	);
-	const results = statement.all(username);
+	const results = statement.all(username) as INoSpoofRow[];
 	if (results.length < 1) { return true; }
 
 	return !results[0].nospoof;

@@ -3,14 +3,15 @@ import { handleCommand } from "./commandHandling";
 import * as publicConfig from "./config/public-config.json";
 import { syncToGeneral, syncToNoBSChannel } from "./sync";
 import { themeIfAppropriate } from "./theming";
-import { ChatSlave } from "./chimingIn/contextualResponses";
+import { ChatMage } from "./chimingIn/contextualResponses";
+import { ChannelType } from "discord.js";
 
 export async function messageHandler(client: Discord.Client, message: Discord.Message) {
 	if (message.author.bot) {
 		return;
 	}
 
-	if (message.channel.type === "dm") {
+	if (message.channel.type === ChannelType.DM) {
 		return;
 	}
 	const channelName = (message.channel as Discord.TextChannel).name;
@@ -30,7 +31,7 @@ export async function messageHandler(client: Discord.Client, message: Discord.Me
 		try {
 			handleCommand(message);
 		} catch (e) {
-			console.log(e); // log somewhere??
+			processError(e); // log somewhere??
 		}
 	} else if (channelName === publicConfig.generalChannel) {
 		// sync to #nobs-chat
@@ -38,7 +39,7 @@ export async function messageHandler(client: Discord.Client, message: Discord.Me
 	}
 
 	themeIfAppropriate(message);
-	ChatSlave.getInstance().processMessage(message);
+	ChatMage.getInstance().processMessage(message);
 }
 
 export async function updateHandler(
@@ -49,7 +50,7 @@ export async function updateHandler(
 		return;
 	}
 
-	if (oldMessage.channel.type === "dm") {
+	if (oldMessage.channel.type === ChannelType.DM) {
 		return;
 	}
 
@@ -77,4 +78,15 @@ export async function updateHandler(
 export function __generateEditedMessage(message: Discord.Message): Discord.Message {
 	message.content = "Edit: " + message.content;
 	return message;
+}
+
+function processError(e: unknown) {
+	let msg = "<unknown error>";
+    if (typeof e === "string") {
+        msg = e;
+    }
+    else if (e instanceof Error) {
+        msg = e.message;
+    }
+    console.log(msg);
 }

@@ -1,6 +1,6 @@
-import { ChatSlaveHaiku } from "./triggers/haiku";
+//import { ChatMageHaiku } from "./triggers/haiku";
 import { WhatIsIt } from "./triggers/whatisit";
-import { ChatSlaveLunch } from "./triggers/lunch";
+import { ChatMageLunch } from "./triggers/lunch";
 import {
 	MGRImpossible,
 	MGRReallyUnlikely,
@@ -18,12 +18,12 @@ export interface IBotTrigger {
 	react(message: Discord.Message): void;
 }
 
-export class ChatSlave {
-	private static instance: ChatSlave;
+export class ChatMage {
+	private static instance: ChatMage;
 	private scenarios: IBotTrigger[];
 
 	private constructor() {
-		// ADD TO THIS ARRAY to add new features to chatslave auto responses
+		// ADD TO THIS ARRAY to add new features to ChatMage auto responses
 
 		this.scenarios = [
 			new MGRImpossible(),
@@ -33,18 +33,18 @@ export class ChatSlave {
 			new MGRPrettyLikely(),
 			new MGRReallyLikely(),
 			new MGRCantMiss(),
-			new ChatSlaveLunch(),
+			new ChatMageLunch(),
 			new WhatIsIt(),
 			new UrMom(),
-			new ChatSlaveHaiku(),
+			//new ChatMageHaiku(),
 		];
 	}
 
-	public static getInstance(): ChatSlave {
-		if (!ChatSlave.instance) {
-			ChatSlave.instance = new ChatSlave();
+	public static getInstance(): ChatMage {
+		if (!ChatMage.instance) {
+			ChatMage.instance = new ChatMage();
 		}
-		return ChatSlave.instance;
+		return ChatMage.instance;
 	}
 
 	public processMessage(message: Discord.Message) {

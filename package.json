@@ -1,31 +1,27 @@
 {
-	"name": "beardslave",
+	"name": "beardmage",
 	"version": "1.0.0",
 	"description": "beardmage",
 	"dependencies": {
-		"@google-cloud/language": "^4.2.4",
-		"@types/better-sqlite3": "^5.4.1",
-		"@types/node": "^15.12.1",
-		"@types/sqlite3": "^3.1.7",
-		"better-sqlite3": "^7.4.0",
+		"@google-cloud/language": "^5.3.0",
+		"@types/better-sqlite3": "^7.6.4",
+		"@types/node": "^20.4.5",
+		"@types/sqlite3": "^3.1.8",
+		"better-sqlite3": "^8.5.0",
 		"discord-reply": "^0.1.2",
-		"discord.js": "^12.5.3",
+		"discord.js": "^14.11.0",
 		"module-invalidate": "^1.0.1",
 		"sqlite-sync": "^0.3.9",
-		"sqlite3": "^5.0.3",
-		"syllable": "^4.1.0",
-		"ts-node": "^10.0.0",
-		"typescript": "^4.3.2"
+		"sqlite3": "^5.1.6",
+		"syllable": "^5.0.1",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.1.6"
 	},
 	"devDependencies": {
-		"@types/mocha": "^8.2.2",
-		"@types/sinon": "^10.0.2",
-		"mocha": "^9.0.0",
-		"sinon": "^11.1.1",
-		"ts-mocha": "^8.0.0"
+		"@types/sinon": "^10.0.15",
+		"sinon": "^15.2.0"
 	},
 	"scripts": {
-		"test": "ts-mocha src/**/*.test.ts",
 		"start": "ts-node src/index.ts",
 		"debug": "node -r ts-node/register --inspect=9229 src/index.ts"
 	},

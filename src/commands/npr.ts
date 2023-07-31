@@ -26,7 +26,9 @@ export default async function process(message: Discord.Message): Promise<void> {
                 await sendCategories(message.author);
             }
         } catch (e) {
-            notifyAuthorOfFailure(message, e.message);
+            if (e instanceof Error) {
+                notifyAuthorOfFailure(message, e.message);
+            }
         }
     }
 
@@ -36,7 +38,9 @@ export default async function process(message: Discord.Message): Promise<void> {
         const feed = JSON.parse(data);
         message.channel.send(getMessage(feed));
     } catch (e) {
-        notifyAuthorOfFailure(message, e.message);
+        if (e instanceof Error) {
+            notifyAuthorOfFailure(message, e.message);
+        }
     }
 }
 

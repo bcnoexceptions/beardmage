@@ -2,10 +2,11 @@ import * as Discord from "discord.js";
 import { IBotTrigger } from "../contextualResponses";
 import { IStringMap } from "./../../util";
 
-import syllable = require("syllable");
+//import { syllable } from 'syllable';
+//const syllable = await import("syllable");
 
 // check for haikus, stored per channel
-export class ChatSlaveHaiku implements IBotTrigger {
+export class ChatMageHaiku implements IBotTrigger {
 	private lastSyllablesByChannel: IStringMap<number[]>;
 
 	public constructor() {
@@ -16,7 +17,10 @@ export class ChatSlaveHaiku implements IBotTrigger {
 		return true;
 	}
 
-	public react(message: Discord.Message): void {
+	public async react(message: Discord.Message): Promise<void> {
+
+		const { syllable } = await import("syllable");
+
 		if (message.content && message.content[0] === "!") {
 			return; // bot command
 		}

@@ -29,7 +29,7 @@ export async function loadCommands() {
             delete require.cache[require.resolve(path)];
             commandMod = await import(path);
         } catch (e) {
-            console.log("Error during invalidation: " + e);
+            logError(e);
             continue;
         }
         const name = file.name.replace(".ts", "");
@@ -61,4 +61,15 @@ export function getAllCommands(): ICommandHandler[] {
     }
 
     return result;
+}
+
+function logError(e: unknown) {
+    let msg = "<unknown>";
+    if (typeof e === "string") {
+        msg = e;
+    }
+    else if (e instanceof Error) {
+        msg = e.message;
+    }
+    console.log("Error during invalidation: " + msg);
 }

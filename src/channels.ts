@@ -3,6 +3,7 @@ import * as Discord from "discord.js";
 import { sendMessageToChannel } from "./webhooks";
 import { notifyAuthorOfFailure } from "./util";
 import { findOrCreateRole, findRole } from "./roles";
+import { ChannelType } from "discord.js";
 
 export function canPostToChannel(channelName: string): boolean {
 	return !!getWebhookForChannel(channelName);
@@ -54,23 +55,23 @@ export async function findOrCreateChannel(
 
 		const everyoneRole = await findRole(server, "@everyone");
 		if (everyoneRole) {
-			await channel.createOverwrite(everyoneRole, {
-				SEND_MESSAGES: false,
-				EMBED_LINKS: false,
-				ADD_REACTIONS: false,
-				ATTACH_FILES: false,
-				READ_MESSAGE_HISTORY: false,
-				VIEW_CHANNEL: false,
+			await channel.permissionOverwrites.create(everyoneRole, {
+				SendMessages: false,
+				EmbedLinks: false,
+				AddReactions: false,
+				AttachFiles: false,
+				ReadMessageHistory: false,
+				ViewChannel: false,
 			});
 		}
 
-		await channel.createOverwrite(role, {
-			SEND_MESSAGES: true,
-			EMBED_LINKS: true,
-			ADD_REACTIONS: true,
-			ATTACH_FILES: true,
-			READ_MESSAGE_HISTORY: true,
-			VIEW_CHANNEL: true,
+		await channel.permissionOverwrites.create(role, {
+			SendMessages: true,
+			EmbedLinks: true,
+			AddReactions: true,
+			AttachFiles: true,
+			ReadMessageHistory: true,
+			ViewChannel: true,
 		});
 
 		console.log("added role " + roleName + " to #" + channelName);
@@ -80,8 +81,8 @@ export async function findOrCreateChannel(
 }
 
 export function findChannel(server: Discord.Guild, channelName: string): Discord.TextChannel | null {
-	for (const channel of server.channels.cache.array()) {
-		if (channel.type !== "text") {
+	for (const [name, channel] of server.channels.cache) {
+		if (channel.type !== ChannelType.GuildText) {
 			continue;
 		}
 
@@ -98,7 +99,10 @@ export async function createChannel(
 	channelName: string,
 	roleName: string
 ): Promise<Discord.TextChannel> {
-	const channel = (await server.channels.create(channelName, { type: "text" })) as Discord.TextChannel;
+
+	const channel = (
+		await server.channels.create({ name: channelName, type: ChannelType.GuildText })
+	) as Discord.TextChannel;
 
 	console.log("created channel " + channelName);
 

@@ -19,8 +19,7 @@ export class UserManager {
 
     public async loadUsers(server: Discord.Guild) {
         const fullGuild = await server.members.fetch();
-        const users = fullGuild.array();
-        for (const user of users) {
+        for (const [_, user] of fullGuild) {
             this.addUser(user);
         }
     }

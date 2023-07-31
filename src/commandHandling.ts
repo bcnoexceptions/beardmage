@@ -25,10 +25,12 @@ export async function handleCommand(message: Discord.Message) {
             try {
                 await command(message);
             } catch (e) {
-                notifyAuthorOfFailure(
-                    message,
-                    `command failed: ${e.toString()}`
-                );
+                if (e instanceof Error) {
+                    notifyAuthorOfFailure(
+                        message,
+                        `command failed: ${e.toString()}`
+                    );
+                }
             }
         } else {
             // don't complain, it could be another bot's territory
@@ -99,7 +101,7 @@ async function getMessageToRegex(
         limit: 100,
     });
 
-    const last100Messages = last100MessagesColl.array();
+    const last100Messages = [...last100MessagesColl.values()];
     last100Messages.sort((m1, m2) => m1.createdTimestamp - m2.createdTimestamp);
 
     let found = 0;

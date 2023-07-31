@@ -3,7 +3,7 @@
 import * as Discord from "discord.js";
 import { IBotTrigger } from "../contextualResponses";
 
-export class ChatSlaveTemplate implements IBotTrigger {
+export class ChatMageTemplate implements IBotTrigger {
 	public doesMessageApply(message: Discord.Message): boolean {
 		return message.content.indexOf("xyzzy") >= 0;
 	}

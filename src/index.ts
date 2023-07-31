@@ -6,12 +6,35 @@ import { messageHandler, updateHandler } from "./messageHandler";
 import { syncServer } from "./serverSetup";
 import { sendWelcomeToUser } from "./sendWelcome";
 import { ReactHandler } from "./reactListening/mainListener";
+import { GatewayIntentBits } from "discord.js";
 
 require("discord-reply");  // add reply functionality, at least until it's in the core API
-const client = new Discord.Client();
+const client = new Discord.Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildBans,
+        GatewayIntentBits.GuildEmojisAndStickers,
+        GatewayIntentBits.GuildIntegrations,
+        GatewayIntentBits.GuildWebhooks,
+        GatewayIntentBits.GuildInvites,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildMessageTyping,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.DirectMessageReactions,
+        GatewayIntentBits.DirectMessageTyping,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildScheduledEvents,
+        GatewayIntentBits.AutoModerationConfiguration,
+        GatewayIntentBits.AutoModerationExecution,
+    ]
+});
 
 client.on("ready", async () => {
-    const xcool = client.guilds.cache.array()[0];
+    const xcool = client.guilds.cache.first()!;
 
     await UserManager.getInstance().loadUsers(xcool);
     knownCommands.loadCommands();
@@ -28,7 +51,7 @@ client.on(
     }
 );
 
-client.on("message", async (message: Discord.Message) => {
+client.on("messageCreate", async (message: Discord.Message) => {
     messageHandler(client, message);
 });
 
@@ -43,7 +66,7 @@ client.on("guildMemberAdd", (member: Discord.GuildMember) => {
     sendWelcomeToUser(member.user);
 });
 
-client.on("messageReactionAdd", (reaction: Discord.MessageReaction, user: Discord.PartialUser | Discord.User) => {
+client.on("messageReactionAdd", (reaction: Discord.MessageReaction | Discord.PartialMessageReaction, user: Discord.PartialUser | Discord.User) => {
     ReactHandler.getInstance().processReact(reaction, user);
 });
 
@@ -73,7 +96,8 @@ async function onRaw(packet: IPacket): Promise<void> {
 
     const user = await client.users.fetch(packet.d.user_id);
     // Adds the currently reacting user to the reaction's users collection.
-    if (reaction) { reaction.users.add(user); }
+    //*BC 2023-01 not needed with new Discord.js version?
+    //if (reaction) { reaction.users.add(user); }
 
     client.emit('messageReactionAdd', reaction, user);
 }
